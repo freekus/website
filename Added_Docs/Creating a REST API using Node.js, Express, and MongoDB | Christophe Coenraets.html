@@ -1,0 +1,2712 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en-US"><head>
+<meta charset="UTF-8">
+<title>Creating a REST API using Node.js, Express, and MongoDB  |  Christophe Coenraets</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="robots" content="index, follow">
+<link rel="stylesheet" type="text/css" href="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/style.css" media="all">
+<link rel="pingback" href="http://coenraets.org/blog/xmlrpc.php">
+<link rel="alternate" type="application/rss+xml" title="Christophe Coenraets » Feed" href="http://coenraets.org/blog/feed/">
+<link rel="alternate" type="application/rss+xml" title="Christophe Coenraets » Comments Feed" href="http://coenraets.org/blog/comments/feed/">
+				
+	<div class="fit-vids-style">­<style>               .fluid-width-video-wrapper {                 width: 100%;                              position: relative;                       padding: 0;                            }                                                                                   .fluid-width-video-wrapper iframe,        .fluid-width-video-wrapper object,        .fluid-width-video-wrapper embed {           position: absolute;                       top: 0;                                   left: 0;                                  width: 100%;                              height: 100%;                          }                                       </style></div><script async="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/cbgapi.loaded_0"></script><script src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/widgets.js" id="twitter-wjs"></script><script src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/ga.js" async="" type="text/javascript"></script><script type="text/javascript">//<![CDATA[
+	// Google Analytics for WordPress by Yoast v4.2.2 | http://yoast.com/wordpress/google-analytics/
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount','UA-721308-1']);
+	_gaq.push(['_trackPageview'],['_trackPageLoadTime']);
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+	//]]></script>
+<link rel="alternate" type="application/rss+xml" title="Christophe Coenraets » Creating a REST API using Node.js, Express, and MongoDB Comments Feed" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/feed/">
+<link rel="stylesheet" id="woo-options-styling-css" href="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/a_002.css" type="text/css" media="all">
+<link rel="stylesheet" id="woo-responsive-layout-css" href="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/generator.css" type="text/css" media="screen">
+<link rel="stylesheet" id="woo-layout-dynamic-css" href="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/a.css" type="text/css" media="all">
+<script type="text/javascript" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/comment-reply.js"></script>
+<script type="text/javascript" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/jquery_002.js"></script>
+<script type="text/javascript" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/third-party.js"></script>
+<script type="text/javascript" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/jquery.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var woo_localized_data = {"select_a_page":"Select a page:"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/general.js"></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://coenraets.org/blog/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://coenraets.org/blog/wp-includes/wlwmanifest.xml"> 
+<link rel="prev" title="PhoneGap API Explorer for Android now on Google Play" href="http://coenraets.org/blog/2012/09/phonegap-api-explorer-for-android-now-on-google-play/">
+<link rel="next" title="NodeCellar: Sample Application with Backbone.js, Twitter Bootstrap, Node.js, Express, and MongoDB" href="http://coenraets.org/blog/2012/10/nodecellar-sample-application-with-backbone-js-twitter-bootstrap-node-js-express-and-mongodb/">
+<meta name="generator" content="WordPress 3.4.2">
+<link rel="canonical" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/">
+<link rel="shortlink" href="http://coenraets.org/blog/?p=3967">
+
+<script src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/swfobject.js" type="text/javascript"></script>
+
+<!-- Theme version -->
+<meta name="generator" content="Canvas 5.0.10">
+<meta name="generator" content="WooFramework 5.4.2">
+
+<!-- Google Webfonts -->
+<link href="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/css.css" rel="stylesheet" type="text/css">
+
+<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+<!--  Mobile viewport scale -->
+<meta content="initial-scale=1.0; maximum-scale=1.0; user-scalable=yes" name="viewport">
+<meta id="syntaxhighlighteranchor" name="syntaxhighlighter-version" content="3.1.3">
+
+<!-- Custom Favicon -->
+<link rel="shortcut icon" href="http://coenraets.org/blog/wp-content/uploads/2012/11/christophe.png">
+<!-- Options Panel Custom CSS -->
+<style type="text/css">
+.entry img {
+  background: none;
+  border: medium none;
+  padding: 5px;
+}
+
+</style>
+
+
+<!-- Woo Shortcodes CSS -->
+<link href="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/shortcodes.css" rel="stylesheet" type="text/css">
+
+<!-- Custom Stylesheet -->
+<link href="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/custom.css" rel="stylesheet" type="text/css">
+<script src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/nonSecureAnonymousFramework"></script><style type="text/css">* html #li_ui_li_gen_1357898960300_0 a#li_ui_li_gen_1357898960300_0-link{height:1% !important;}#li_ui_li_gen_1357898960300_0{position:relative !important;overflow:visible !important;display:block !important;}#li_ui_li_gen_1357898960300_0 a#li_ui_li_gen_1357898960300_0-link{border:0 !important;height:20px !important;text-decoration:none !important;padding:0 !important;margin:0 !important;display:inline-block !important;}#li_ui_li_gen_1357898960300_0 a#li_ui_li_gen_1357898960300_0-link:link, #li_ui_li_gen_1357898960300_0 a#li_ui_li_gen_1357898960300_0-link:visited, #li_ui_li_gen_1357898960300_0 a#li_ui_li_gen_1357898960300_0-link:hover, #li_ui_li_gen_1357898960300_0 a#li_ui_li_gen_1357898960300_0-link:active{border:0 !important;text-decoration:none !important;}#li_ui_li_gen_1357898960300_0 a#li_ui_li_gen_1357898960300_0-link:after{content:"." !important;display:block !important;clear:both !important;visibility:hidden !important;line-height:0 !important;height:0 !important;}#li_ui_li_gen_1357898960300_0 #li_ui_li_gen_1357898960300_0-logo{background:url(http://static.licdn.com/scds/common/u/img/sprite/sprite_connect_v13.png) 0px -276px no-repeat !important;cursor:pointer !important;border:0 !important;text-indent:-9999em !important;overflow:hidden !important;padding:0 !important;margin:0 !important;position:absolute !important;left:0px !important;top:0px !important;display:block !important;width:20px !important;height:20px !important;float:right !important;}#li_ui_li_gen_1357898960300_0.hovered #li_ui_li_gen_1357898960300_0-logo{background-position:-20px -276px !important;}#li_ui_li_gen_1357898960300_0.clicked #li_ui_li_gen_1357898960300_0-logo, #li_ui_li_gen_1357898960300_0.down #li_ui_li_gen_1357898960300_0-logo{background-position:-40px -276px !important;}.IN-shadowed #li_ui_li_gen_1357898960300_0 #li_ui_li_gen_1357898960300_0-logo{}#li_ui_li_gen_1357898960300_0 #li_ui_li_gen_1357898960300_0-title{color:#333 !important;cursor:pointer !important;display:block !important;white-space:nowrap !important;float:left !important;margin-left:1px !important;vertical-align:top !important;overflow:hidden !important;text-align:center !important;height:18px !important;padding:0 4px 0 23px !important;border:1px solid #000 !important;border-top-color:#E2E2E2 !important;border-right-color:#BFBFBF !important;border-bottom-color:#B9B9B9 !important;border-left-color:#E2E2E2 !important;border-left:0 !important;text-shadow:#FFFFFF -1px 1px 0 !important;line-height:20px !important;border-radius:0 !important;-moz-border-radius:0 !important;border-top-right-radius:2px !important;border-bottom-right-radius:2px !important;-moz-border-radius-topright:2px !important;-moz-border-radius-bottomright:2px !important;background-color:#ECECEC !important;background-image:-moz-linear-gradient(top, #FEFEFE 0%, #ECECEC 100%) !important;}#li_ui_li_gen_1357898960300_0.hovered #li_ui_li_gen_1357898960300_0-title{border:1px solid #000 !important;border-top-color:#ABABAB !important;border-right-color:#9A9A9A !important;border-bottom-color:#787878 !important;border-left-color:#04568B !important;border-left:0 !important;background-color:#EDEDED !important;background-image:-moz-linear-gradient(top, #EDEDED 0%, #DEDEDE 100%) !important;}#li_ui_li_gen_1357898960300_0.clicked #li_ui_li_gen_1357898960300_0-title, #li_ui_li_gen_1357898960300_0.down #li_ui_li_gen_1357898960300_0-title{color:#666 !important;border:1px solid #000 !important;border-top-color:#B6B6B6 !important;border-right-color:#B3B3B3 !important;border-bottom-color:#9D9D9D !important;border-left-color:#49627B !important;border-left:0 !important;background-color:#DEDEDE !important;background-image:-moz-linear-gradient(top, #E3E3E3 0%, #EDEDED 100%) !important;}.IN-shadowed #li_ui_li_gen_1357898960300_0 #li_ui_li_gen_1357898960300_0-title{}.IN-shadowed #li_ui_li_gen_1357898960300_0.hovered #li_ui_li_gen_1357898960300_0-title{}.IN-shadowed #li_ui_li_gen_1357898960300_0.clicked #li_ui_li_gen_1357898960300_0-title, .IN-shadowed #li_ui_li_gen_1357898960300_0.down #li_ui_li_gen_1357898960300_0-title{}#li_ui_li_gen_1357898960300_0 #li_ui_li_gen_1357898960300_0-title-text, #li_ui_li_gen_1357898960300_0 #li_ui_li_gen_1357898960300_0-title-text *{color:#333 !important;font-size:11px !important;font-family:Arial, sans-serif !important;font-weight:bold !important;font-style:normal !important;display:inline-block !important;background:transparent none !important;vertical-align:baseline !important;height:18px !important;line-height:20px !important;float:none !important;}#li_ui_li_gen_1357898960300_0 #li_ui_li_gen_1357898960300_0-title-text strong{font-weight:bold !important;}#li_ui_li_gen_1357898960300_0 #li_ui_li_gen_1357898960300_0-title-text em{font-style:italic !important;}#li_ui_li_gen_1357898960300_0.hovered #li_ui_li_gen_1357898960300_0-title-text, #li_ui_li_gen_1357898960300_0.hovered #li_ui_li_gen_1357898960300_0-title-text *{color:#000 !important;}#li_ui_li_gen_1357898960300_0.clicked #li_ui_li_gen_1357898960300_0-title-text, #li_ui_li_gen_1357898960300_0.down #li_ui_li_gen_1357898960300_0-title-text, #li_ui_li_gen_1357898960300_0.clicked #li_ui_li_gen_1357898960300_0-title-text *, #li_ui_li_gen_1357898960300_0.down #li_ui_li_gen_1357898960300_0-title-text *{color:#666 !important;}#li_ui_li_gen_1357898960300_0 #li_ui_li_gen_1357898960300_0-title #li_ui_li_gen_1357898960300_0-mark{display:inline-block !important;width:0px !important;overflow:hidden !important;}.success #li_ui_li_gen_1357898960300_0 #li_ui_li_gen_1357898960300_0-title{color:#333 !important;border-top-color:#E2E2E2 !important;border-right-color:#BFBFBF !important;border-bottom-color:#B9B9B9 !important;border-left-color:#E2E2E2 !important;background-color:#ECECEC !important;background-image:-moz-linear-gradient(top, #FEFEFE 0%, #ECECEC 100%) !important;}.success #li_ui_li_gen_1357898960300_0 #li_ui_li_gen_1357898960300_0-title-text, .success #li_ui_li_gen_1357898960300_0 #li_ui_li_gen_1357898960300_0-title-text *{color:#333 !important;}.IN-shadowed .success #li_ui_li_gen_1357898960300_0 #li_ui_li_gen_1357898960300_0-title{}.success #li_ui_li_gen_1357898960300_0.hovered #li_ui_li_gen_1357898960300_0-title{color:#000 !important;border-top-color:#ABABAB !important;border-right-color:#9A9A9A !important;border-bottom-color:#787878 !important;border-left-color:#04568B !important;background-color:#EDEDED !important;background-image:-moz-linear-gradient(top, #EDEDED 0%, #DEDEDE 100%) !important;}.success #li_ui_li_gen_1357898960300_0.hovered #li_ui_li_gen_1357898960300_0-title-text, .success #li_ui_li_gen_1357898960300_0.hovered #li_ui_li_gen_1357898960300_0-title-text *{color:#000 !important;}.success #li_ui_li_gen_1357898960300_0.clicked #li_ui_li_gen_1357898960300_0-title, .success #li_ui_li_gen_1357898960300_0.down #li_ui_li_gen_1357898960300_0-title{color:#666 !important;border-top-color:#B6B6B6 !important;border-right-color:#B3B3B3 !important;border-bottom-color:#9D9D9D !important;border-left-color:#49627B !important;background-color:#DEDEDE !important;background-image:-moz-linear-gradient(top, #E3E3E3 0%, #EDEDED 100%) !important;}.success #li_ui_li_gen_1357898960300_0.clicked #li_ui_li_gen_1357898960300_0-title-text, .success #li_ui_li_gen_1357898960300_0.down #li_ui_li_gen_1357898960300_0-title-text, .success #li_ui_li_gen_1357898960300_0.clicked #li_ui_li_gen_1357898960300_0-title-text *, .success #li_ui_li_gen_1357898960300_0.down #li_ui_li_gen_1357898960300_0-title-text *{color:#666 !important;}.IN-shadowed .success #li_ui_li_gen_1357898960300_0.clicked #li_ui_li_gen_1357898960300_0-title, .IN-shadowed .success #li_ui_li_gen_1357898960300_0.down #li_ui_li_gen_1357898960300_0-title{}</style></head>
+<body data-twttr-rendered="true" class="single single-post postid-3967 single-format-standard chrome boxed-layout two-col-left width-960 two-col-left-960">
+<div id="wrapper">        
+	    
+	<div id="header" class="col-full">
+ 		
+		       
+		<div id="logo">
+		<span class="site-title"><a href="http://coenraets.org/blog/">Christophe Coenraets</a></span>
+<span class="site-description">The Web Platform and Mobile Application Development</span>
+		</div><!-- /#logo -->
+	      
+	    <h3 class="nav-toggle icon"><a href="#navigation">Navigation</a></h3>
+	      
+		       
+	</div><!-- /#header -->
+		<div id="navigation" class="col-full">
+				<ul class="rss fr">
+						<li class="sub-rss"><a class="icon" href="http://coenraets.org/blog/feed/"></a></li>
+		</ul>
+				<ul id="main-nav" class="nav fl"><li id="menu-item-4594" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-4594"><a href="http://coenraets.org/">Home</a></li>
+<li id="menu-item-4863" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4863"><a href="http://coenraets.org/blog/phonegap-tutorial/">PhoneGap Tutorial</a></li>
+<li id="menu-item-2661" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2661"><a href="http://coenraets.org/blog/bio/">Bio</a></li>
+</ul>	
+	</div><!-- /#navigation -->
+       
+    <!-- #content Starts -->
+	    <div id="content" class="col-full">
+    
+    	<div id="main-sidebar-container">    
+
+            <!-- #main Starts -->
+                        <div id="main">                       
+<div class="post-3967 post type-post status-publish format-standard hentry category-express category-javascript category-mongodb category-node-js category-rest">
+<h1 class="title">Creating a REST API using Node.js, Express, and MongoDB</h1><div class="post-meta"><span class="small">By</span> <span class="author vcard"><span class="fn"><a href="http://coenraets.org/blog/author/admin/" title="Posts by Christophe Coenraets" rel="author">Christophe Coenraets</a></span></span> <span class="small">on</span> <abbr class="date time published" title="2012-10-02T17:03:24+0000">October 2, 2012</abbr>  <span class="small">in</span> <span class="categories"><a href="http://coenraets.org/blog/category/express/" title="View all posts in Express">Express</a>, <a href="http://coenraets.org/blog/category/javascript/" title="View all posts in JavaScript">JavaScript</a>, <a href="http://coenraets.org/blog/category/mongodb/" title="View all posts in MongoDB">MongoDB</a>, <a href="http://coenraets.org/blog/category/node-js/" title="View all posts in Node.js">Node.js</a>, <a href="http://coenraets.org/blog/category/rest/" title="View all posts in REST">REST</a></span>   </div>
+	<div class="entry">
+	    <style>
+table {
+border-collapse:collapse;
+width: 100%;
+}
+th, td {
+padding:4px;
+border: 1px solid #ddd;
+}
+</style>
+<p><a href="http://coenraets.org/blog/wp-content/uploads/2012/10/nodemango1.jpg"><img src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/nodemango1.jpg" alt="" title="nodemango" class="aligncenter size-full wp-image-4129" width="600" height="120"></a><br>
+I recently used Node.js, Express, and MongoDB to rewrite a RESTful API I had previously written in Java and PHP with MySQL (<a href="http://coenraets.org/blog/2011/12/restful-services-with-jquery-and-java-using-jax-rs-and-jersey/">Java version</a>, <a href="http://coenraets.org/blog/2011/12/restful-services-with-jquery-php-and-the-slim-framework/">PHP version</a>), and I thought I’d share the experience… </p>
+<p>Here is a quick guide showing how to build a RESTful API using <a href="http://nodejs.org/" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://nodejs.org']);">Node.js</a>, <a href="http://expressjs.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://expressjs.com']);">Express</a>, and <a href="http://www.mongodb.org/" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://www.mongodb.org']);">MongoDB</a>.</p>
+<h3>Installing Node.js</h3>
+<ol>
+<li>Go to <a href="http://nodejs.org/" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://nodejs.org']);">http://nodejs.org</a>, and click the <em>Install</em> button.</li>
+<li>Run the installer that you just downloaded. When the installer completes, a message indicates that <em>Node was installed at /usr/local/bin/node</em> and <em>npm was installed at /usr/local/bin/npm</em>.</li>
+</ol>
+<p>At this point node.js is ready to use. Let’s implement the webserver 
+application from the nodejs.org home page. We will use it as a starting 
+point for our project: a RESTful API to access data (retrieve, create, 
+update, delete) in a wine cellar database.<br>
+<span id="more-3967"></span></p>
+<ol>
+<li>Create a folder named <em>nodecellar</em> anywhere on your file system.</li>
+<li>In the wincellar folder, create a file named <em>server.js</em>.</li>
+<li>Code server.js as follows:
+<p><script src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/3815873.js"></script><link href="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/embed-c14e307821ae2832783369ab288fe82a.css" media="screen" rel="stylesheet"></p><div id="gist3815873" class="gist">
+      <div class="gist-file">
+        <div class="gist-data gist-syntax">
+
+
+
+  <div class="data">
+    <table class="lines highlight" cellpadding="0" cellspacing="0">
+      <tbody><tr>
+        <td class="line_numbers">
+          <span id="file-server-js-L1" rel="file-server-js-L1">1</span>
+          <span id="file-server-js-L2" rel="file-server-js-L2">2</span>
+          <span id="file-server-js-L3" rel="file-server-js-L3">3</span>
+          <span id="file-server-js-L4" rel="file-server-js-L4">4</span>
+          <span id="file-server-js-L5" rel="file-server-js-L5">5</span>
+          <span id="file-server-js-L6" rel="file-server-js-L6">6</span>
+        </td>
+        <td class="line_data" width="100%">
+          <pre><div class="line" id="file-server-js-LC1"><span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'http'</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC2"><span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC3">  <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">'Content-Type'</span><span class="o">:</span> <span class="s1">'text/plain'</span><span class="p">});</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC4">  <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">'Hello World\n'</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC5"><span class="p">}).</span><span class="nx">listen</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="s1">'127.0.0.1'</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC6"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Server running at http://127.0.0.1:3000/'</span><span class="p">);</span></div></pre>
+        </td>
+      </tr>
+    </tbody></table>
+  </div>
+
+        </div>
+
+        <div class="gist-meta">
+          <a href="https://gist.github.com/raw/3815873/46c4a853e72c4ef3aa1e6624c15c43731008cdca/server.js" style="float:right">view raw</a>
+          <a href="https://gist.github.com/3815873#file-server-js" style="float:right; margin-right:10px; color:#666;">server.js</a>
+          <a href="https://gist.github.com/3815873">This Gist</a> brought to you by <a href="http://github.com/">GitHub</a>.
+        </div>
+      </div>
+</div>
+
+</li>
+</ol>
+<p>We are now ready to start the server and test the application:</p>
+<ol>
+<li>To start the server, open a shell, <em>cd</em> to your nodecellar directory, and start your server as follows:
+<p class="shell">node server.js</p>
+</li>
+<li>To test the application, open a browser and access <a href="http://localhost:3000/" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','']);">http://localhost:3000</a>.</li>
+</ol>
+<p><br></p>
+<h3>Installing Express</h3>
+<p>Express is a lightweight node.js web application framework. It 
+provides the basic HTTP infrastructure that makes it easy to create REST
+ APIs.</p>
+<p>To install Express in the nodecellar application:</p>
+<ol>
+<li>In the nodecellar folder, create a file named <em>package.json</em> defined as follows:
+<p><script src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/3815974_002.js"></script><link href="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/embed-c14e307821ae2832783369ab288fe82a.css" media="screen" rel="stylesheet"></p><div id="gist3815974" class="gist">
+      <div class="gist-file">
+        <div class="gist-data gist-syntax">
+
+
+
+  <div class="data">
+    <table class="lines highlight" cellpadding="0" cellspacing="0">
+      <tbody><tr class="alt-table-row">
+        <td class="line_numbers">
+          <span id="file-package-json-L1" rel="file-package-json-L1">1</span>
+          <span id="file-package-json-L2" rel="file-package-json-L2">2</span>
+          <span id="file-package-json-L3" rel="file-package-json-L3">3</span>
+          <span id="file-package-json-L4" rel="file-package-json-L4">4</span>
+          <span id="file-package-json-L5" rel="file-package-json-L5">5</span>
+          <span id="file-package-json-L6" rel="file-package-json-L6">6</span>
+          <span id="file-package-json-L7" rel="file-package-json-L7">7</span>
+          <span id="file-package-json-L8" rel="file-package-json-L8">8</span>
+          <span id="file-package-json-L9" rel="file-package-json-L9">9</span>
+        </td>
+        <td class="line_data" width="100%">
+          <pre><div class="line" id="file-package-json-LC1"><span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-package-json-LC2">    <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"wine-cellar"</span><span class="p">,</span></div></pre>
+          <pre><div class="line" id="file-package-json-LC3">    <span class="nt">"description"</span><span class="p">:</span> <span class="s2">"Wine Cellar Application"</span><span class="p">,</span></div></pre>
+          <pre><div class="line" id="file-package-json-LC4">    <span class="nt">"version"</span><span class="p">:</span> <span class="s2">"0.0.1"</span><span class="p">,</span></div></pre>
+          <pre><div class="line" id="file-package-json-LC5">    <span class="nt">"private"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span></div></pre>
+          <pre><div class="line" id="file-package-json-LC6">    <span class="nt">"dependencies"</span><span class="p">:</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-package-json-LC7">        <span class="nt">"express"</span><span class="p">:</span> <span class="s2">"3.x"</span></div></pre>
+          <pre><div class="line" id="file-package-json-LC8">    <span class="p">}</span></div></pre>
+          <pre><div class="line" id="file-package-json-LC9"><span class="p">}</span></div></pre>
+        </td>
+      </tr>
+    </tbody></table>
+  </div>
+
+        </div>
+
+        <div class="gist-meta">
+          <a href="https://gist.github.com/raw/3815974/932695f236a4177eeb570f830aebbdeb9dbf41df/package.json" style="float:right">view raw</a>
+          <a href="https://gist.github.com/3815974#file-package-json" style="float:right; margin-right:10px; color:#666;">package.json</a>
+          <a href="https://gist.github.com/3815974">This Gist</a> brought to you by <a href="http://github.com/">GitHub</a>.
+        </div>
+      </div>
+</div>
+<p></p>
+</li>
+<li>Open a shell, <em>cd</em> to the nodecellar directory, and execute the following command to install the express module.
+<p class="shell">npm install</p>
+<p>A <em>node_modules</em> folder is created in the nodecellar folder, and the Express module is installed in a subfolder of node_modules.
+</p></li>
+</ol>
+<p>Now that Express is installed, we can stub a basic REST API for the nodecellar application: </p>
+<ol>
+<li>Open server.js and replace its content as follows:
+<p><script src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/3815974.js"></script><link href="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/embed-c14e307821ae2832783369ab288fe82a.css" media="screen" rel="stylesheet"></p><div id="gist3815974" class="gist">
+      <div class="gist-file">
+        <div class="gist-data gist-syntax">
+
+
+
+  <div class="data">
+    <table class="lines highlight" cellpadding="0" cellspacing="0">
+      <tbody><tr>
+        <td class="line_numbers">
+          <span id="file-server-js-L1" rel="file-server-js-L1">1</span>
+          <span id="file-server-js-L2" rel="file-server-js-L2">2</span>
+          <span id="file-server-js-L3" rel="file-server-js-L3">3</span>
+          <span id="file-server-js-L4" rel="file-server-js-L4">4</span>
+          <span id="file-server-js-L5" rel="file-server-js-L5">5</span>
+          <span id="file-server-js-L6" rel="file-server-js-L6">6</span>
+          <span id="file-server-js-L7" rel="file-server-js-L7">7</span>
+          <span id="file-server-js-L8" rel="file-server-js-L8">8</span>
+          <span id="file-server-js-L9" rel="file-server-js-L9">9</span>
+          <span id="file-server-js-L10" rel="file-server-js-L10">10</span>
+          <span id="file-server-js-L11" rel="file-server-js-L11">11</span>
+          <span id="file-server-js-L12" rel="file-server-js-L12">12</span>
+          <span id="file-server-js-L13" rel="file-server-js-L13">13</span>
+        </td>
+        <td class="line_data" width="100%">
+          <pre><div class="line" id="file-server-js-LC1"><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'express'</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC2">&nbsp;</div></pre>
+          <pre><div class="line" id="file-server-js-LC3"><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC4">&nbsp;</div></pre>
+          <pre><div class="line" id="file-server-js-LC5"><span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/wines'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC6">    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">([{</span><span class="nx">name</span><span class="o">:</span><span class="s1">'wine1'</span><span class="p">},</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span><span class="s1">'wine2'</span><span class="p">}]);</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC7"><span class="p">});</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC8"><span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/wines/:id'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC9">    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">({</span><span class="nx">id</span><span class="o">:</span><span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">"The Name"</span><span class="p">,</span> <span class="nx">description</span><span class="o">:</span> <span class="s2">"description"</span><span class="p">});</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC10"><span class="p">});</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC11">&nbsp;</div></pre>
+          <pre><div class="line" id="file-server-js-LC12"><span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">3000</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC13"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Listening on port 3000...'</span><span class="p">);</span></div></pre>
+        </td>
+      </tr>
+    </tbody></table>
+  </div>
+
+        </div>
+
+        <div class="gist-meta">
+          <a href="https://gist.github.com/raw/3815974/d5709e25967f6488dec524c4a287dda5cb9423a3/server.js" style="float:right">view raw</a>
+          <a href="https://gist.github.com/3815974#file-server-js" style="float:right; margin-right:10px; color:#666;">server.js</a>
+          <a href="https://gist.github.com/3815974">This Gist</a> brought to you by <a href="http://github.com/">GitHub</a>.
+        </div>
+      </div>
+</div>
+
+</li>
+<li>Stop (CTRL+C) and restart the server:
+<p class="shell">node server</p>
+</li>
+<li>To test the API, open a browser and access the following URLs:<br>
+<table style="margin-top:12px;">
+<tbody><tr class="alt-table-row">
+<td width="320">Get all the wines in the database:</td>
+<td><a href="http://localhost:3000/wines" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','']);">http://localhost:3000/wines</a></td>
+</tr>
+<tr>
+<td>Get wine with a specific id (for example: 1):</td>
+<td><a href="http://localhost:3000/wines/1" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','']);">http://localhost:3000/wines/1</a></td>
+</tr>
+</tbody></table>
+</li>
+</ol>
+<p><br></p>
+<h3>Using Node.js Modules</h3>
+<p>In a large application, things could easily get out of control if we 
+keep adding code to a single JavaScript file (server.js). Let’s move the
+ wine-related code in a <em>wines</em> module that we then declare as a dependency in server.js.</p>
+<ol>
+<li>In the nodecellar folder, create a subfolder called <em>routes</em>.</li>
+<li>In the routes folder create a file named <em>wines.js</em> and defined as follows:
+<p><script src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/3816103.js"></script><link href="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/embed-c14e307821ae2832783369ab288fe82a.css" media="screen" rel="stylesheet"></p><div id="gist3816103" class="gist">
+      <div class="gist-file">
+        <div class="gist-data gist-syntax">
+
+
+
+  <div class="data">
+    <table class="lines highlight" cellpadding="0" cellspacing="0">
+      <tbody><tr class="alt-table-row">
+        <td class="line_numbers">
+          <span id="file-wines-js-L1" rel="file-wines-js-L1">1</span>
+          <span id="file-wines-js-L2" rel="file-wines-js-L2">2</span>
+          <span id="file-wines-js-L3" rel="file-wines-js-L3">3</span>
+          <span id="file-wines-js-L4" rel="file-wines-js-L4">4</span>
+          <span id="file-wines-js-L5" rel="file-wines-js-L5">5</span>
+          <span id="file-wines-js-L6" rel="file-wines-js-L6">6</span>
+          <span id="file-wines-js-L7" rel="file-wines-js-L7">7</span>
+        </td>
+        <td class="line_data" width="100%">
+          <pre><div class="line" id="file-wines-js-LC1"><span class="nx">exports</span><span class="p">.</span><span class="nx">findAll</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC2">    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">([{</span><span class="nx">name</span><span class="o">:</span><span class="s1">'wine1'</span><span class="p">},</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span><span class="s1">'wine2'</span><span class="p">},</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span><span class="s1">'wine3'</span><span class="p">}]);</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC3"><span class="p">};</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC4">&nbsp;</div></pre>
+          <pre><div class="line" id="file-wines-js-LC5"><span class="nx">exports</span><span class="p">.</span><span class="nx">findById</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC6">    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">({</span><span class="nx">id</span><span class="o">:</span><span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">"The Name"</span><span class="p">,</span> <span class="nx">description</span><span class="o">:</span> <span class="s2">"description"</span><span class="p">});</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC7"><span class="p">};</span></div></pre>
+        </td>
+      </tr>
+    </tbody></table>
+  </div>
+
+        </div>
+
+        <div class="gist-meta">
+          <a href="https://gist.github.com/raw/3816103/ae6f710e5daee092fd7ce9db80ad9afe31a7740d/wines.js" style="float:right">view raw</a>
+          <a href="https://gist.github.com/3816103#file-wines-js" style="float:right; margin-right:10px; color:#666;">wines.js</a>
+          <a href="https://gist.github.com/3816103">This Gist</a> brought to you by <a href="http://github.com/">GitHub</a>.
+        </div>
+      </div>
+</div>
+
+</li>
+<li>Modify server.js as follows to delegate the routes implementation to the wines module:
+<p><script src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/3816103_002.js"></script><link href="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/embed-c14e307821ae2832783369ab288fe82a.css" media="screen" rel="stylesheet"></p><div id="gist3816103" class="gist">
+      <div class="gist-file">
+        <div class="gist-data gist-syntax">
+
+
+
+  <div class="data">
+    <table class="lines highlight" cellpadding="0" cellspacing="0">
+      <tbody><tr>
+        <td class="line_numbers">
+          <span id="file-server-js-L1" rel="file-server-js-L1">1</span>
+          <span id="file-server-js-L2" rel="file-server-js-L2">2</span>
+          <span id="file-server-js-L3" rel="file-server-js-L3">3</span>
+          <span id="file-server-js-L4" rel="file-server-js-L4">4</span>
+          <span id="file-server-js-L5" rel="file-server-js-L5">5</span>
+          <span id="file-server-js-L6" rel="file-server-js-L6">6</span>
+          <span id="file-server-js-L7" rel="file-server-js-L7">7</span>
+          <span id="file-server-js-L8" rel="file-server-js-L8">8</span>
+          <span id="file-server-js-L9" rel="file-server-js-L9">9</span>
+          <span id="file-server-js-L10" rel="file-server-js-L10">10</span>
+        </td>
+        <td class="line_data" width="100%">
+          <pre><div class="line" id="file-server-js-LC1"><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'express'</span><span class="p">),</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC2">    <span class="nx">wines</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./routes/wines'</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC3">&nbsp;</div></pre>
+          <pre><div class="line" id="file-server-js-LC4"><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC5">&nbsp;</div></pre>
+          <pre><div class="line" id="file-server-js-LC6"><span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/wines'</span><span class="p">,</span> <span class="nx">wines</span><span class="p">.</span><span class="nx">findAll</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC7"><span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/wines/:id'</span><span class="p">,</span> <span class="nx">wines</span><span class="p">.</span><span class="nx">findById</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC8">&nbsp;</div></pre>
+          <pre><div class="line" id="file-server-js-LC9"><span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">3000</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC10"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Listening on port 3000...'</span><span class="p">);</span></div></pre>
+        </td>
+      </tr>
+    </tbody></table>
+  </div>
+
+        </div>
+
+        <div class="gist-meta">
+          <a href="https://gist.github.com/raw/3816103/4ce87a3c13cf4e1eb8941e489ead168985913c9f/server.js" style="float:right">view raw</a>
+          <a href="https://gist.github.com/3816103#file-server-js" style="float:right; margin-right:10px; color:#666;">server.js</a>
+          <a href="https://gist.github.com/3816103">This Gist</a> brought to you by <a href="http://github.com/">GitHub</a>.
+        </div>
+      </div>
+</div>
+
+</li>
+<li>Restart the server and test the APIs:<br>
+<table style="margin-top:12px;margin-bottom:12px;">
+<tbody><tr class="alt-table-row">
+<td width="320">Get all the wines in the database:</td>
+<td><a href="http://localhost:3000/wines" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','']);">http://localhost:3000/wines</a></td>
+</tr>
+<tr>
+<td>Get wine with a specific id (for example: 1):</td>
+<td><a href="http://localhost:3000/wines/1" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','']);">http://localhost:3000/wines/1</a></td>
+</tr>
+</tbody></table>
+</li>
+</ol>
+<p>The next step is to replace the placeholder data with actual data from a MongoDB database.<br>
+<br></p>
+<h3>Installing MongoDB</h3>
+<p>To install MongoDB on your specific platform, refer to the <a href="http://www.mongodb.org/display/DOCS/Quickstart" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://www.mongodb.org']);">MongoDB QuickStart</a>. Here are some quick steps to install MongoDB on a Mac:</p>
+<ol>
+<li>Open a terminal window and type the following command to download the latest release:
+<p class="shell">curl http://downloads.mongodb.org/osx/mongodb-osx-x86_64-2.2.0.tgz &gt; ~/Downloads/mongo.tgz</p>
+<p>Note: You may need to adjust the version number. 2.2.0 is the latest production version at the time of this writing.
+</p></li>
+<li>Extract the files from the mongo.tgz archive:
+<p class="shell">
+cd ~/Downloads<br>
+tar -zxvf mongo.tgz
+</p>
+</li>
+<li>Move the mongo folder to /usr/local (or another folder according to your personal preferences):
+<p class="shell">sudo mv -n mongodb-osx-x86_64-2.2.0/ /usr/local/</p>
+</li>
+<li>(Optional) Create a symbolic link to make it easier to access:
+<p class="shell">sudo ln -s /usr/local/mongodb-osx-x86_64-2.2.0 /usr/local/mongodb</p>
+</li>
+<li>Create a folder for MongoDB’s data and set the appropriate permissions:
+<p class="shell">sudo mkdir -p /data/db<br>
+sudo chown `id -u` /data/db</p>
+</li>
+<li>Start mongodb
+<p class="shell">cd /usr/local/mongodb<br>
+./bin/mongod</p>
+</li>
+<li>You can also open the MongoDB Interactive Shell in another terminal 
+window to interact with your database using a command line interface.
+<p class="shell">cd /usr/local/mongodb<br>
+./bin/mongo</p>
+<p>Refer to the <a href="http://www.mongodb.org/display/DOCS/Overview+-+The+MongoDB+Interactive+Shell" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://www.mongodb.org']);">MongoDB Interactive Shell documentation</a> for more information.
+</p></li>
+</ol>
+<p><br></p>
+<h3>Installing the MongoDB Driver for Node.js</h3>
+<p>There are different solutions offering different levels of abstraction to access MongoDB from Node.js (For example, <a href="http://mongoosejs.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://mongoosejs.com']);">Mongoose</a> and <a href="https://github.com/masylum/mongolia" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://github.com']);">Mongolia</a>). A comparaison of these solutions is beyond the scope of this article. In this, guide we use the <a href="http://www.mongodb.org/display/DOCS/node.JS" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://www.mongodb.org']);">native Node.js driver</a>.  </p>
+<p>To install the the native Node.js driver, open a terminal window, cd 
+to your nodecellar folder, and execute the following command:</p>
+<p class="shell">npm install mongodb</p>
+<p><br></p>
+<h3>Implementing the REST API</h3>
+<p>The full REST API for the nodecellar application consists of the following methods:</p>
+<table style="margin-bottom:24px;">
+<tbody><tr class="alt-table-row">
+<th>Method</th>
+<th>URL</th>
+<th>Action</th>
+</tr>
+<tr>
+<td>GET</td>
+<td>/wines</td>
+<td>Retrieve all wines</td>
+</tr>
+<tr class="alt-table-row">
+<td>GET</td>
+<td>/wines/5069b47aa892630aae000001</td>
+<td>Retrieve the wine with the specified _id</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>/wines</td>
+<td>Add a new wine</td>
+</tr>
+<tr class="alt-table-row">
+<td>PUT</td>
+<td>/wines/5069b47aa892630aae000001</td>
+<td>Update wine with the specified _id</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td>/wines/5069b47aa892630aae000001</td>
+<td>Delete the wine with the specified _id</td>
+</tr>
+</tbody></table>
+<p>To implement all the <em>routes</em> required by the API, modify server.js as follows:<br>
+<script src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/3819468.js"></script><link href="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/embed-c14e307821ae2832783369ab288fe82a.css" media="screen" rel="stylesheet"></p><div id="gist3819468" class="gist">
+      <div class="gist-file">
+        <div class="gist-data gist-syntax">
+
+
+
+  <div class="data">
+    <table class="lines highlight" cellpadding="0" cellspacing="0">
+      <tbody><tr class="alt-table-row">
+        <td class="line_numbers">
+          <span id="file-server-js-L1" rel="file-server-js-L1">1</span>
+          <span id="file-server-js-L2" rel="file-server-js-L2">2</span>
+          <span id="file-server-js-L3" rel="file-server-js-L3">3</span>
+          <span id="file-server-js-L4" rel="file-server-js-L4">4</span>
+          <span id="file-server-js-L5" rel="file-server-js-L5">5</span>
+          <span id="file-server-js-L6" rel="file-server-js-L6">6</span>
+          <span id="file-server-js-L7" rel="file-server-js-L7">7</span>
+          <span id="file-server-js-L8" rel="file-server-js-L8">8</span>
+          <span id="file-server-js-L9" rel="file-server-js-L9">9</span>
+          <span id="file-server-js-L10" rel="file-server-js-L10">10</span>
+          <span id="file-server-js-L11" rel="file-server-js-L11">11</span>
+          <span id="file-server-js-L12" rel="file-server-js-L12">12</span>
+          <span id="file-server-js-L13" rel="file-server-js-L13">13</span>
+          <span id="file-server-js-L14" rel="file-server-js-L14">14</span>
+          <span id="file-server-js-L15" rel="file-server-js-L15">15</span>
+          <span id="file-server-js-L16" rel="file-server-js-L16">16</span>
+          <span id="file-server-js-L17" rel="file-server-js-L17">17</span>
+          <span id="file-server-js-L18" rel="file-server-js-L18">18</span>
+        </td>
+        <td class="line_data" width="100%">
+          <pre><div class="line" id="file-server-js-LC1"><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'express'</span><span class="p">),</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC2">    <span class="nx">wine</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./routes/wines'</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC3">&nbsp;</div></pre>
+          <pre><div class="line" id="file-server-js-LC4"><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC5">&nbsp;</div></pre>
+          <pre><div class="line" id="file-server-js-LC6"><span class="nx">app</span><span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC7">    <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">logger</span><span class="p">(</span><span class="s1">'dev'</span><span class="p">));</span>     <span class="cm">/* 'default', 'short', 'tiny', 'dev' */</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC8">    <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">bodyParser</span><span class="p">());</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC9"><span class="p">});</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC10">&nbsp;</div></pre>
+          <pre><div class="line" id="file-server-js-LC11"><span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/wines'</span><span class="p">,</span> <span class="nx">wine</span><span class="p">.</span><span class="nx">findAll</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC12"><span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/wines/:id'</span><span class="p">,</span> <span class="nx">wine</span><span class="p">.</span><span class="nx">findById</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC13"><span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">'/wines'</span><span class="p">,</span> <span class="nx">wine</span><span class="p">.</span><span class="nx">addWine</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC14"><span class="nx">app</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">'/wines/:id'</span><span class="p">,</span> <span class="nx">wine</span><span class="p">.</span><span class="nx">updateWine</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC15"><span class="nx">app</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="s1">'/wines/:id'</span><span class="p">,</span> <span class="nx">wine</span><span class="p">.</span><span class="nx">deleteWine</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC16">&nbsp;</div></pre>
+          <pre><div class="line" id="file-server-js-LC17"><span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">3000</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-server-js-LC18"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Listening on port 3000...'</span><span class="p">);</span></div></pre>
+        </td>
+      </tr>
+    </tbody></table>
+  </div>
+
+        </div>
+
+        <div class="gist-meta">
+          <a href="https://gist.github.com/raw/3819468/9711262233638bfbb4e0b5da25c56ac433b68ca5/server.js" style="float:right">view raw</a>
+          <a href="https://gist.github.com/3819468#file-server-js" style="float:right; margin-right:10px; color:#666;">server.js</a>
+          <a href="https://gist.github.com/3819468">This Gist</a> brought to you by <a href="http://github.com/">GitHub</a>.
+        </div>
+      </div>
+</div>
+<p></p>
+<p>To provide the data access logic for each route, modify wines.js as follows:<br>
+<script src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/3819468_002.js"></script><link href="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/embed-c14e307821ae2832783369ab288fe82a.css" media="screen" rel="stylesheet"></p><div id="gist3819468" class="gist">
+      <div class="gist-file">
+        <div class="gist-data gist-syntax">
+
+
+
+  <div class="data">
+    <table class="lines highlight" cellpadding="0" cellspacing="0">
+      <tbody><tr>
+        <td class="line_numbers">
+          <span id="file-wines-js-L1" rel="file-wines-js-L1">1</span>
+          <span id="file-wines-js-L2" rel="file-wines-js-L2">2</span>
+          <span id="file-wines-js-L3" rel="file-wines-js-L3">3</span>
+          <span id="file-wines-js-L4" rel="file-wines-js-L4">4</span>
+          <span id="file-wines-js-L5" rel="file-wines-js-L5">5</span>
+          <span id="file-wines-js-L6" rel="file-wines-js-L6">6</span>
+          <span id="file-wines-js-L7" rel="file-wines-js-L7">7</span>
+          <span id="file-wines-js-L8" rel="file-wines-js-L8">8</span>
+          <span id="file-wines-js-L9" rel="file-wines-js-L9">9</span>
+          <span id="file-wines-js-L10" rel="file-wines-js-L10">10</span>
+          <span id="file-wines-js-L11" rel="file-wines-js-L11">11</span>
+          <span id="file-wines-js-L12" rel="file-wines-js-L12">12</span>
+          <span id="file-wines-js-L13" rel="file-wines-js-L13">13</span>
+          <span id="file-wines-js-L14" rel="file-wines-js-L14">14</span>
+          <span id="file-wines-js-L15" rel="file-wines-js-L15">15</span>
+          <span id="file-wines-js-L16" rel="file-wines-js-L16">16</span>
+          <span id="file-wines-js-L17" rel="file-wines-js-L17">17</span>
+          <span id="file-wines-js-L18" rel="file-wines-js-L18">18</span>
+          <span id="file-wines-js-L19" rel="file-wines-js-L19">19</span>
+          <span id="file-wines-js-L20" rel="file-wines-js-L20">20</span>
+          <span id="file-wines-js-L21" rel="file-wines-js-L21">21</span>
+          <span id="file-wines-js-L22" rel="file-wines-js-L22">22</span>
+          <span id="file-wines-js-L23" rel="file-wines-js-L23">23</span>
+          <span id="file-wines-js-L24" rel="file-wines-js-L24">24</span>
+          <span id="file-wines-js-L25" rel="file-wines-js-L25">25</span>
+          <span id="file-wines-js-L26" rel="file-wines-js-L26">26</span>
+          <span id="file-wines-js-L27" rel="file-wines-js-L27">27</span>
+          <span id="file-wines-js-L28" rel="file-wines-js-L28">28</span>
+          <span id="file-wines-js-L29" rel="file-wines-js-L29">29</span>
+          <span id="file-wines-js-L30" rel="file-wines-js-L30">30</span>
+          <span id="file-wines-js-L31" rel="file-wines-js-L31">31</span>
+          <span id="file-wines-js-L32" rel="file-wines-js-L32">32</span>
+          <span id="file-wines-js-L33" rel="file-wines-js-L33">33</span>
+          <span id="file-wines-js-L34" rel="file-wines-js-L34">34</span>
+          <span id="file-wines-js-L35" rel="file-wines-js-L35">35</span>
+          <span id="file-wines-js-L36" rel="file-wines-js-L36">36</span>
+          <span id="file-wines-js-L37" rel="file-wines-js-L37">37</span>
+          <span id="file-wines-js-L38" rel="file-wines-js-L38">38</span>
+          <span id="file-wines-js-L39" rel="file-wines-js-L39">39</span>
+          <span id="file-wines-js-L40" rel="file-wines-js-L40">40</span>
+          <span id="file-wines-js-L41" rel="file-wines-js-L41">41</span>
+          <span id="file-wines-js-L42" rel="file-wines-js-L42">42</span>
+          <span id="file-wines-js-L43" rel="file-wines-js-L43">43</span>
+          <span id="file-wines-js-L44" rel="file-wines-js-L44">44</span>
+          <span id="file-wines-js-L45" rel="file-wines-js-L45">45</span>
+          <span id="file-wines-js-L46" rel="file-wines-js-L46">46</span>
+          <span id="file-wines-js-L47" rel="file-wines-js-L47">47</span>
+          <span id="file-wines-js-L48" rel="file-wines-js-L48">48</span>
+          <span id="file-wines-js-L49" rel="file-wines-js-L49">49</span>
+          <span id="file-wines-js-L50" rel="file-wines-js-L50">50</span>
+          <span id="file-wines-js-L51" rel="file-wines-js-L51">51</span>
+          <span id="file-wines-js-L52" rel="file-wines-js-L52">52</span>
+          <span id="file-wines-js-L53" rel="file-wines-js-L53">53</span>
+          <span id="file-wines-js-L54" rel="file-wines-js-L54">54</span>
+          <span id="file-wines-js-L55" rel="file-wines-js-L55">55</span>
+          <span id="file-wines-js-L56" rel="file-wines-js-L56">56</span>
+          <span id="file-wines-js-L57" rel="file-wines-js-L57">57</span>
+          <span id="file-wines-js-L58" rel="file-wines-js-L58">58</span>
+          <span id="file-wines-js-L59" rel="file-wines-js-L59">59</span>
+          <span id="file-wines-js-L60" rel="file-wines-js-L60">60</span>
+          <span id="file-wines-js-L61" rel="file-wines-js-L61">61</span>
+          <span id="file-wines-js-L62" rel="file-wines-js-L62">62</span>
+          <span id="file-wines-js-L63" rel="file-wines-js-L63">63</span>
+          <span id="file-wines-js-L64" rel="file-wines-js-L64">64</span>
+          <span id="file-wines-js-L65" rel="file-wines-js-L65">65</span>
+          <span id="file-wines-js-L66" rel="file-wines-js-L66">66</span>
+          <span id="file-wines-js-L67" rel="file-wines-js-L67">67</span>
+          <span id="file-wines-js-L68" rel="file-wines-js-L68">68</span>
+          <span id="file-wines-js-L69" rel="file-wines-js-L69">69</span>
+          <span id="file-wines-js-L70" rel="file-wines-js-L70">70</span>
+          <span id="file-wines-js-L71" rel="file-wines-js-L71">71</span>
+          <span id="file-wines-js-L72" rel="file-wines-js-L72">72</span>
+          <span id="file-wines-js-L73" rel="file-wines-js-L73">73</span>
+          <span id="file-wines-js-L74" rel="file-wines-js-L74">74</span>
+          <span id="file-wines-js-L75" rel="file-wines-js-L75">75</span>
+          <span id="file-wines-js-L76" rel="file-wines-js-L76">76</span>
+          <span id="file-wines-js-L77" rel="file-wines-js-L77">77</span>
+          <span id="file-wines-js-L78" rel="file-wines-js-L78">78</span>
+          <span id="file-wines-js-L79" rel="file-wines-js-L79">79</span>
+          <span id="file-wines-js-L80" rel="file-wines-js-L80">80</span>
+          <span id="file-wines-js-L81" rel="file-wines-js-L81">81</span>
+          <span id="file-wines-js-L82" rel="file-wines-js-L82">82</span>
+          <span id="file-wines-js-L83" rel="file-wines-js-L83">83</span>
+          <span id="file-wines-js-L84" rel="file-wines-js-L84">84</span>
+          <span id="file-wines-js-L85" rel="file-wines-js-L85">85</span>
+          <span id="file-wines-js-L86" rel="file-wines-js-L86">86</span>
+          <span id="file-wines-js-L87" rel="file-wines-js-L87">87</span>
+          <span id="file-wines-js-L88" rel="file-wines-js-L88">88</span>
+          <span id="file-wines-js-L89" rel="file-wines-js-L89">89</span>
+          <span id="file-wines-js-L90" rel="file-wines-js-L90">90</span>
+          <span id="file-wines-js-L91" rel="file-wines-js-L91">91</span>
+          <span id="file-wines-js-L92" rel="file-wines-js-L92">92</span>
+          <span id="file-wines-js-L93" rel="file-wines-js-L93">93</span>
+          <span id="file-wines-js-L94" rel="file-wines-js-L94">94</span>
+          <span id="file-wines-js-L95" rel="file-wines-js-L95">95</span>
+          <span id="file-wines-js-L96" rel="file-wines-js-L96">96</span>
+          <span id="file-wines-js-L97" rel="file-wines-js-L97">97</span>
+          <span id="file-wines-js-L98" rel="file-wines-js-L98">98</span>
+          <span id="file-wines-js-L99" rel="file-wines-js-L99">99</span>
+          <span id="file-wines-js-L100" rel="file-wines-js-L100">100</span>
+          <span id="file-wines-js-L101" rel="file-wines-js-L101">101</span>
+          <span id="file-wines-js-L102" rel="file-wines-js-L102">102</span>
+          <span id="file-wines-js-L103" rel="file-wines-js-L103">103</span>
+          <span id="file-wines-js-L104" rel="file-wines-js-L104">104</span>
+          <span id="file-wines-js-L105" rel="file-wines-js-L105">105</span>
+          <span id="file-wines-js-L106" rel="file-wines-js-L106">106</span>
+          <span id="file-wines-js-L107" rel="file-wines-js-L107">107</span>
+          <span id="file-wines-js-L108" rel="file-wines-js-L108">108</span>
+          <span id="file-wines-js-L109" rel="file-wines-js-L109">109</span>
+          <span id="file-wines-js-L110" rel="file-wines-js-L110">110</span>
+          <span id="file-wines-js-L111" rel="file-wines-js-L111">111</span>
+          <span id="file-wines-js-L112" rel="file-wines-js-L112">112</span>
+          <span id="file-wines-js-L113" rel="file-wines-js-L113">113</span>
+          <span id="file-wines-js-L114" rel="file-wines-js-L114">114</span>
+          <span id="file-wines-js-L115" rel="file-wines-js-L115">115</span>
+          <span id="file-wines-js-L116" rel="file-wines-js-L116">116</span>
+          <span id="file-wines-js-L117" rel="file-wines-js-L117">117</span>
+        </td>
+        <td class="line_data" width="100%">
+          <pre><div class="line" id="file-wines-js-LC1"><span class="kd">var</span> <span class="nx">mongo</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'mongodb'</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC2">&nbsp;</div></pre>
+          <pre><div class="line" id="file-wines-js-LC3"><span class="kd">var</span> <span class="nx">Server</span> <span class="o">=</span> <span class="nx">mongo</span><span class="p">.</span><span class="nx">Server</span><span class="p">,</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC4">    <span class="nx">Db</span> <span class="o">=</span> <span class="nx">mongo</span><span class="p">.</span><span class="nx">Db</span><span class="p">,</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC5">    <span class="nx">BSON</span> <span class="o">=</span> <span class="nx">mongo</span><span class="p">.</span><span class="nx">BSONPure</span><span class="p">;</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC6">&nbsp;</div></pre>
+          <pre><div class="line" id="file-wines-js-LC7"><span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Server</span><span class="p">(</span><span class="s1">'localhost'</span><span class="p">,</span> <span class="mi">27017</span><span class="p">,</span> <span class="p">{</span><span class="nx">auto_reconnect</span><span class="o">:</span> <span class="kc">true</span><span class="p">});</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC8"><span class="nx">db</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Db</span><span class="p">(</span><span class="s1">'winedb'</span><span class="p">,</span> <span class="nx">server</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC9">&nbsp;</div></pre>
+          <pre><div class="line" id="file-wines-js-LC10"><span class="nx">db</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">db</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC11">    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC12">        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Connected to 'winedb' database"</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC13">        <span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="s1">'wines'</span><span class="p">,</span> <span class="p">{</span><span class="nx">safe</span><span class="o">:</span><span class="kc">true</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">collection</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC14">            <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC15">                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"The 'wines' collection doesn't exist. Creating it with sample data..."</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC16">                <span class="nx">populateDB</span><span class="p">();</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC17">            <span class="p">}</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC18">        <span class="p">});</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC19">    <span class="p">}</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC20"><span class="p">});</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC21">&nbsp;</div></pre>
+          <pre><div class="line" id="file-wines-js-LC22"><span class="nx">exports</span><span class="p">.</span><span class="nx">findById</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC23">    <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC24">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Retrieving wine: '</span> <span class="o">+</span> <span class="nx">id</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC25">    <span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="s1">'wines'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">collection</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC26">        <span class="nx">collection</span><span class="p">.</span><span class="nx">findOne</span><span class="p">({</span><span class="s1">'_id'</span><span class="o">:</span><span class="k">new</span> <span class="nx">BSON</span><span class="p">.</span><span class="nx">ObjectID</span><span class="p">(</span><span class="nx">id</span><span class="p">)},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">item</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC27">            <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC28">        <span class="p">});</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC29">    <span class="p">});</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC30"><span class="p">};</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC31">&nbsp;</div></pre>
+          <pre><div class="line" id="file-wines-js-LC32"><span class="nx">exports</span><span class="p">.</span><span class="nx">findAll</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC33">    <span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="s1">'wines'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">collection</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC34">        <span class="nx">collection</span><span class="p">.</span><span class="nx">find</span><span class="p">().</span><span class="nx">toArray</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">items</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC35">            <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">items</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC36">        <span class="p">});</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC37">    <span class="p">});</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC38"><span class="p">};</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC39">&nbsp;</div></pre>
+          <pre><div class="line" id="file-wines-js-LC40"><span class="nx">exports</span><span class="p">.</span><span class="nx">addWine</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC41">    <span class="kd">var</span> <span class="nx">wine</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">;</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC42">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Adding wine: '</span> <span class="o">+</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">wine</span><span class="p">));</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC43">    <span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="s1">'wines'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">collection</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC44">        <span class="nx">collection</span><span class="p">.</span><span class="nx">insert</span><span class="p">(</span><span class="nx">wine</span><span class="p">,</span> <span class="p">{</span><span class="nx">safe</span><span class="o">:</span><span class="kc">true</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC45">            <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC46">                <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">({</span><span class="s1">'error'</span><span class="o">:</span><span class="s1">'An error has occurred'</span><span class="p">});</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC47">            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC48">                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Success: '</span> <span class="o">+</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]));</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC49">                <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC50">            <span class="p">}</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC51">        <span class="p">});</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC52">    <span class="p">});</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC53"><span class="p">}</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC54">&nbsp;</div></pre>
+          <pre><div class="line" id="file-wines-js-LC55"><span class="nx">exports</span><span class="p">.</span><span class="nx">updateWine</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC56">    <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC57">    <span class="kd">var</span> <span class="nx">wine</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">;</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC58">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Updating wine: '</span> <span class="o">+</span> <span class="nx">id</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC59">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">wine</span><span class="p">));</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC60">    <span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="s1">'wines'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">collection</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC61">        <span class="nx">collection</span><span class="p">.</span><span class="nx">update</span><span class="p">({</span><span class="s1">'_id'</span><span class="o">:</span><span class="k">new</span> <span class="nx">BSON</span><span class="p">.</span><span class="nx">ObjectID</span><span class="p">(</span><span class="nx">id</span><span class="p">)},</span> <span class="nx">wine</span><span class="p">,</span> <span class="p">{</span><span class="nx">safe</span><span class="o">:</span><span class="kc">true</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC62">            <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC63">                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Error updating wine: '</span> <span class="o">+</span> <span class="nx">err</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC64">                <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">({</span><span class="s1">'error'</span><span class="o">:</span><span class="s1">'An error has occurred'</span><span class="p">});</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC65">            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC66">                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">''</span> <span class="o">+</span> <span class="nx">result</span> <span class="o">+</span> <span class="s1">' document(s) updated'</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC67">                <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">wine</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC68">            <span class="p">}</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC69">        <span class="p">});</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC70">    <span class="p">});</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC71"><span class="p">}</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC72">&nbsp;</div></pre>
+          <pre><div class="line" id="file-wines-js-LC73"><span class="nx">exports</span><span class="p">.</span><span class="nx">deleteWine</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC74">    <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC75">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Deleting wine: '</span> <span class="o">+</span> <span class="nx">id</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC76">    <span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="s1">'wines'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">collection</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC77">        <span class="nx">collection</span><span class="p">.</span><span class="nx">remove</span><span class="p">({</span><span class="s1">'_id'</span><span class="o">:</span><span class="k">new</span> <span class="nx">BSON</span><span class="p">.</span><span class="nx">ObjectID</span><span class="p">(</span><span class="nx">id</span><span class="p">)},</span> <span class="p">{</span><span class="nx">safe</span><span class="o">:</span><span class="kc">true</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC78">            <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC79">                <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">({</span><span class="s1">'error'</span><span class="o">:</span><span class="s1">'An error has occurred - '</span> <span class="o">+</span> <span class="nx">err</span><span class="p">});</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC80">            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC81">                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">''</span> <span class="o">+</span> <span class="nx">result</span> <span class="o">+</span> <span class="s1">' document(s) deleted'</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC82">                <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC83">            <span class="p">}</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC84">        <span class="p">});</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC85">    <span class="p">});</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC86"><span class="p">}</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC87">&nbsp;</div></pre>
+          <pre><div class="line" id="file-wines-js-LC88"><span class="cm">/*--------------------------------------------------------------------------------------------------------------------*/</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC89"><span class="c1">// Populate database with sample data -- Only used once: the first time the application is started.</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC90"><span class="c1">// You'd typically not find this code in a real-life app, since the database would already exist.</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC91"><span class="kd">var</span> <span class="nx">populateDB</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC92">&nbsp;</div></pre>
+          <pre><div class="line" id="file-wines-js-LC93">    <span class="kd">var</span> <span class="nx">wines</span> <span class="o">=</span> <span class="p">[</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC94">    <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC95">        <span class="nx">name</span><span class="o">:</span> <span class="s2">"CHATEAU DE SAINT COSME"</span><span class="p">,</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC96">        <span class="nx">year</span><span class="o">:</span> <span class="s2">"2009"</span><span class="p">,</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC97">        <span class="nx">grapes</span><span class="o">:</span> <span class="s2">"Grenache / Syrah"</span><span class="p">,</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC98">        <span class="nx">country</span><span class="o">:</span> <span class="s2">"France"</span><span class="p">,</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC99">        <span class="nx">region</span><span class="o">:</span> <span class="s2">"Southern Rhone"</span><span class="p">,</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC100">        <span class="nx">description</span><span class="o">:</span> <span class="s2">"The aromas of fruit and spice..."</span><span class="p">,</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC101">        <span class="nx">picture</span><span class="o">:</span> <span class="s2">"saint_cosme.jpg"</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC102">    <span class="p">},</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC103">    <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC104">        <span class="nx">name</span><span class="o">:</span> <span class="s2">"LAN RIOJA CRIANZA"</span><span class="p">,</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC105">        <span class="nx">year</span><span class="o">:</span> <span class="s2">"2006"</span><span class="p">,</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC106">        <span class="nx">grapes</span><span class="o">:</span> <span class="s2">"Tempranillo"</span><span class="p">,</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC107">        <span class="nx">country</span><span class="o">:</span> <span class="s2">"Spain"</span><span class="p">,</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC108">        <span class="nx">region</span><span class="o">:</span> <span class="s2">"Rioja"</span><span class="p">,</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC109">        <span class="nx">description</span><span class="o">:</span> <span class="s2">"A resurgence of interest in boutique vineyards..."</span><span class="p">,</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC110">        <span class="nx">picture</span><span class="o">:</span> <span class="s2">"lan_rioja.jpg"</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC111">    <span class="p">}];</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC112">&nbsp;</div></pre>
+          <pre><div class="line" id="file-wines-js-LC113">    <span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="s1">'wines'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">collection</span><span class="p">)</span> <span class="p">{</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC114">        <span class="nx">collection</span><span class="p">.</span><span class="nx">insert</span><span class="p">(</span><span class="nx">wines</span><span class="p">,</span> <span class="p">{</span><span class="nx">safe</span><span class="o">:</span><span class="kc">true</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{});</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC115">    <span class="p">});</span></div></pre>
+          <pre><div class="line" id="file-wines-js-LC116">&nbsp;</div></pre>
+          <pre><div class="line" id="file-wines-js-LC117"><span class="p">};</span></div></pre>
+        </td>
+      </tr>
+    </tbody></table>
+  </div>
+
+        </div>
+
+        <div class="gist-meta">
+          <a href="https://gist.github.com/raw/3819468/667d8eeef993ff0ccfad91f8d3aea1ec0e82bd5b/wines.js" style="float:right">view raw</a>
+          <a href="https://gist.github.com/3819468#file-wines-js" style="float:right; margin-right:10px; color:#666;">wines.js</a>
+          <a href="https://gist.github.com/3819468">This Gist</a> brought to you by <a href="http://github.com/">GitHub</a>.
+        </div>
+      </div>
+</div>
+<p></p>
+<p>Restart the server to test the API.</p>
+<p><br></p>
+<h3>Testing the API using cURL</h3>
+<p>If you want to test your API before using it in a client application,
+ you can invoke your REST services straight from a browser address bar. 
+For example, you could try:</p>
+<ul>
+<li><a href="http://localhost:3000/wines" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','']);">http://localhost:3000/wines</a></li>
+</ul>
+<p>You will only be able to test your GET services that way. A more versatile solution to test RESTful services is to use <a href="http://curl.haxx.se/" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://curl.haxx.se']);">cURL</a>, a command line utility for transferring data with URL syntax.</p>
+<p>For example, using cURL, you can test the Wine Cellar API with the following commands:</p>
+<ul>
+<li>Get all wines:
+<p class="shell">
+curl -i -X GET http://localhost:3000/wines
+</p>
+</li>
+<li>Get wine with _id value of 5069b47aa892630aae000007 (use a value that exists in your database):
+<p class="shell">
+curl -i -X GET http://localhost:3000/wines/5069b47aa892630aae000007
+</p>
+</li>
+<li>Delete wine with _id value of 5069b47aa892630aae000007:
+<p class="shell">
+curl -i -X DELETE http://localhost:3000/wines/5069b47aa892630aae000007
+</p>
+</li>
+<li>Add a new wine:
+<p class="shell">
+curl -i -X POST -H 'Content-Type: application/json' -d '{"name": "New Wine", "year": "2009"}' http://localhost:3000/wines
+</p>
+</li>
+<li>Modify wine with _id value of 5069b47aa892630aae000007:
+<p class="shell">
+curl -i -X PUT -H 'Content-Type: application/json' -d '{"name": "New 
+Wine", "year": "2010"}' 
+http://localhost:3000/wines/5069b47aa892630aae000007
+</p>
+</li>
+</ul>
+<p><br></p>
+<h3>Next Steps</h3>
+<p>In my next post, I’ll share a client application that makes use of that API. Update: The “next post” is now available <a href="http://coenraets.org/blog/2012/10/nodecellar-sample-application-with-backbone-js-twitter-bootstrap-node-js-express-and-mongodb/">here</a>. </p>
+	</div><!-- /.entry -->
+	<div class="fix"></div>
+<div class="woo-sc-hr"></div><span style="float:left;width:240px;"><div class="shortcode-twitter-follow">
+<iframe data-twttr-rendered="true" title="Twitter Follow Button" style="width: 230px; height: 20px;" class="twitter-follow-button" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/follow_button.html" allowtransparency="true" scrolling="no" frameborder="0"></iframe>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</div><!--/.shortcode-twitter-follow-->
+
+</span><span style="float:left;width:110px;"><div class="woo-sc-twitter left"><iframe data-twttr-rendered="true" title="Twitter Tweet Button" style="width: 106px; height: 20px;" class="twitter-share-button twitter-count-horizontal" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/tweet_button.html" allowtransparency="true" scrolling="no" frameborder="0"></iframe><script type="text/javascript" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/widgets.js"></script></div></span><span style="float:left;width:80px;"><script gapi_processed="true" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/plusone.js" type="text/javascript">
+</script>
+<script type="text/javascript">gapi.plusone.go();</script>
+<div class="shortcode-google-plusone"><div id="___plusone_0" style="height: 20px; width: 90px; display: inline-block; text-indent: 0px; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% transparent; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline;"><iframe title="+1" data-gapiattached="true" allowtransparency="true" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/fastbutton.html" name="I0_1357898923975" id="I0_1357898923975" vspace="0" tabindex="0" style="position: static; top: 0px; width: 90px; margin: 0px; border-style: none; left: 0px; visibility: visible; height: 20px;" marginwidth="0" marginheight="0" hspace="0" scrolling="no" width="100%" frameborder="0"></iframe></div></div><!--/.shortcode-google-plusone-->
+
+</span><span style="float:left;width:80px;"><span class="IN-widget" style="line-height: 1; vertical-align: baseline; display: inline-block; text-align: center;"><span style="padding: 0px ! important; margin: 0px ! important; text-indent: 0px ! important; display: inline-block ! important; vertical-align: baseline ! important; font-size: 1px ! important;"><span id="li_ui_li_gen_1357898960300_0"><a id="li_ui_li_gen_1357898960300_0-link" href="javascript:void(0);"><span id="li_ui_li_gen_1357898960300_0-logo">in</span><span id="li_ui_li_gen_1357898960300_0-title"><span id="li_ui_li_gen_1357898960300_0-mark"></span><span id="li_ui_li_gen_1357898960300_0-title-text">Share</span></span></a></span></span></span><script type="IN/Share+init"></script>
+
+</span><span style="float:left;width:110px;">
+<div class="woo-fblike none">
+<iframe src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/like.html" allowtransparency="true" style="border:none; overflow:hidden; width:auto; height:25px;" scrolling="no" frameborder="0"></iframe>
+</div>
+	</span>	 
+	<div id="connect">
+		<h3>Subscribe</h3>
+		
+		<div class="col-left">
+			<p> </p>
+			
+			
+						
+						<div class="social">
+		   				   		<a href="http://coenraets.org/blog/feed/" class="subscribe" title="RSS"></a>
+
+		   				   		<a href="http://www.twitter.com/ccoenraets" class="twitter" title="Twitter"></a>
+
+		   				   		<a href="http://www.youtube.com/ccoenraets" class="youtube" title="YouTube"></a>
+
+		   				   		<a href="http://www.linkedin.com/in/coenraets" class="linkedin" title="LinkedIn"></a>
+
+		   				   		<a href="https://plus.google.com/113420108342911308974/" class="googleplus" title="Google+"></a>
+
+							</div>
+						
+		</div><!-- col-left -->
+		
+				<div class="related-posts col-right">
+			<h4>Related Posts:</h4>
+			<div class="woo-sc-related-posts">
+<ul>
+<li class="post-id-4904">
+
+<a href="http://coenraets.org/blog/2012/12/phonegap-and-phonegap-build-in-5-minutes/" title="PhoneGap and PhoneGap Build in 5 Minutes" class="related-title"><span>PhoneGap and PhoneGap Build in 5 Minutes</span></a>
+</li>
+<li class="post-id-4841">
+
+<a href="http://coenraets.org/blog/2012/11/new-tutorial-developing-and-architecting-a-phonegap-application/" title="New Tutorial: Developing and Architecting a PhoneGap Application" class="related-title"><span>New Tutorial: Developing and Architecting a PhoneGap Application</span></a>
+</li>
+<li class="post-id-4476">
+
+<a href="http://coenraets.org/blog/2012/10/creating-a-dropbox-integration-extension-for-brackets/" title="Creating a Dropbox Integration Extension for Brackets" class="related-title"><span>Creating a Dropbox Integration Extension for Brackets</span></a>
+</li>
+<li class="post-id-4443">
+
+<a href="http://coenraets.org/blog/2012/10/exploring-and-contributing-to-web-platform-docs/" title="Exploring and Contributing to Web Platform Docs" class="related-title"><span>Exploring and Contributing to Web Platform Docs</span></a>
+</li>
+<li class="post-id-4236">
+
+<a href="http://coenraets.org/blog/2012/10/real-time-web-analytics-with-node-js-and-socket-io/" title="Real Time Web Analytics with Node.js and Socket.IO" class="related-title"><span>Real Time Web Analytics with Node.js and Socket.IO</span></a>
+</li>
+</ul>
+<div class="fix"></div><!--/.fix-->
+</div><!--/.woo-sc-related-posts-->		</div><!-- col-right -->
+									
+        <div class="fix"></div>
+	</div>
+	<div class="post-utility"></div>
+</div><!-- /.post -->
+	        <div class="post-entries">
+	            <div class="nav-prev icon fl"><a href="http://coenraets.org/blog/2012/09/phonegap-api-explorer-for-android-now-on-google-play/" rel="prev">PhoneGap API Explorer for Android now on Google Play</a></div>
+	            <div class="nav-next icon fr"><a href="http://coenraets.org/blog/2012/10/nodecellar-sample-application-with-backbone-js-twitter-bootstrap-node-js-express-and-mongodb/" rel="next">NodeCellar: Sample Application with Backbone.js, Twitter Bootstrap, Node.js, Express, and MongoDB</a></div>
+	            <div class="fix"></div>
+	        </div>	
+	
+		<div id="comments">		 	<h3 id="comments-title">43 Responses to <em>Creating a REST API using Node.js, Express, and MongoDB</em></h3>
+		 	<ol class="commentlist">
+					                 
+		<li class="comment even thread-even depth-1 parent">
+	    
+	    	<a name="comment-131516"></a>
+	      	
+	      	<div id="li-comment-131516" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/4045ba4180705ecfd29dc474169b79c9.jpeg" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name"><a href="http://www.swickmultimedia.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://www.swickmultimedia.com']);" rel="external nofollow" class="url url">Phil</a></span>           
+	                <span class="date">October 2, 2012 at 6:40 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-131516" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-131516">
+				
+				<p>This is sweet!  Thanks!</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=131516#respond" onclick='return addComment.moveForm("comment-131516", "131516", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	<ul class="children">
+	                 
+		<li class="comment odd alt depth-2 parent">
+	    
+	    	<a name="comment-194935"></a>
+	      	
+	      	<div id="li-comment-194935" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/c51ac969912b9f84c86a29c0eac7a90e.jpeg" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name"><a href="http://www.ricecode.net/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://www.ricecode.net']);" rel="external nofollow" class="url url">Ralph Allan Rice</a></span>           
+	                <span class="date">November 26, 2012 at 6:15 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-194935" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-194935">
+				
+				<p>Good tutorial!</p>
+<p>One minor note:  even though you do not explicitly mention the 
+content type, the examples at the beginning do not output (strictly) 
+legal JSON. The keys for id, name and description should be quoted. </p>
+<p>Source- <a href="http://tools.ietf.org/html/rfc4627" onclick="javascript:_gaq.push(['_trackEvent','outbound-comment','http://tools.ietf.org']);" rel="nofollow">http://tools.ietf.org/html/rfc4627</a>:</p>
+<p>2.2.  Objects</p>
+<p>   An object structure is represented as a pair of curly brackets<br>
+   surrounding zero or more name/value pairs (or members).  A name is a<br>
+   string.  A single colon comes after each name, separating the name<br>
+   from the value.  A single comma separates a value from a following<br>
+   name.  The names within an object SHOULD be unique.</p>
+<p>      object = begin-object [ member *( value-separator member ) ]<br>
+      end-object</p>
+<p>      member = string name-separator value</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=194935#respond" onclick='return addComment.moveForm("comment-194935", "194935", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	<ul class="children">
+	                 
+		<li class="comment even depth-3">
+	    
+	    	<a name="comment-194967"></a>
+	      	
+	      	<div id="li-comment-194967" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/c51ac969912b9f84c86a29c0eac7a90e.jpeg" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name"><a href="http://www.ricecode.net/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://www.ricecode.net']);" rel="external nofollow" class="url url">Ralph Allan Rice</a></span>           
+	                <span class="date">November 26, 2012 at 6:33 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-194967" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-194967">
+				
+				<p>I didn’t notice my previous comment was not complete.  I wanted to end it with this question:</p>
+<p>Does Response#send() properly format to json?  According to the docs,
+ it just says that it will respond with a JSON representation.</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=194967#respond" onclick='return addComment.moveForm("comment-194967", "194967", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+</ul>
+</li>
+</ul>
+</li>
+	                 
+		<li class="comment odd alt thread-odd thread-alt depth-1 parent">
+	    
+	    	<a name="comment-131535"></a>
+	      	
+	      	<div id="li-comment-131535" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/611fb406438136e9dd11827cc6972af2.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name">Jon</span>           
+	                <span class="date">October 2, 2012 at 7:00 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-131535" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-131535">
+				
+				<p>Good example of a CRUD api, but unfortunately not a REST api. Research HATEOAS to understand why.</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=131535#respond" onclick='return addComment.moveForm("comment-131535", "131535", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	<ul class="children">
+	                 
+		<li class="comment even depth-2">
+	    
+	    	<a name="comment-222910"></a>
+	      	
+	      	<div id="li-comment-222910" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/57dc6cd4a1505a1d4129fb2cb6fc0265.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name">Chris</span>           
+	                <span class="date">December 11, 2012 at 2:28 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-222910" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-222910">
+				
+				<p>Would perhaps be a more constructive comment if it outlined what 
+would make it a full REST api. As I understand things the important 
+thing missing is that e.g. after a POST added a new wine the response 
+would include the URI to GET that wine entity. ?</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=222910#respond" onclick='return addComment.moveForm("comment-222910", "222910", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment odd alt depth-2">
+	    
+	    	<a name="comment-273344"></a>
+	      	
+	      	<div id="li-comment-273344" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/9fbd295d45aa357bbadfd41798d748f0.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name">Olivier</span>           
+	                <span class="date">January 10, 2013 at 1:23 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-273344" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-273344">
+				
+				<p>That comment does not help in any way. If you *think* you 
+understand REST better than anyone else, then explain what you find 
+sub-optimal in the proposed solution and propose concrete improvements. 
+Otherwise, you are only making noise around a very nice and helpful blog
+ (thanks a lot for that Chris).</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=273344#respond" onclick='return addComment.moveForm("comment-273344", "273344", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+</ul>
+</li>
+	                 
+		<li class="comment even thread-even depth-1">
+	    
+	    	<a name="comment-131632"></a>
+	      	
+	      	<div id="li-comment-131632" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/40cad11e26ab7a80d32e47de212f50ad.jpeg" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name">J Bunting</span>           
+	                <span class="date">October 2, 2012 at 10:14 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-131632" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-131632">
+				
+				<p>Thanks for posting this Chris, super useful.</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=131632#respond" onclick='return addComment.moveForm("comment-131632", "131632", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment odd alt thread-odd thread-alt depth-1">
+	    
+	    	<a name="comment-132281"></a>
+	      	
+	      	<div id="li-comment-132281" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/361e79e6c2f2ecab21126da0e2e6129a.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name"><a href="http://www.mfkrh-ar.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://www.mfkrh-ar.com']);" rel="external nofollow" class="url url">mfkrh-ar.com</a></span>           
+	                <span class="date">October 3, 2012 at 10:42 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-132281" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-132281">
+				
+				<p>mfkrh-ar.com super useful for posting this Thanks</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=132281#respond" onclick='return addComment.moveForm("comment-132281", "132281", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment even thread-even depth-1">
+	    
+	    	<a name="comment-132295"></a>
+	      	
+	      	<div id="li-comment-132295" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/cda1d6f117c37f9a86d1fe544a0461a6.jpeg" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name">Ihor</span>           
+	                <span class="date">October 3, 2012 at 11:16 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-132295" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-132295">
+				
+				<p>good post. Thanks.<br>
+Few questions:<br>
+1. sessions – how to block any hacks with DELETE and PUT any records<br>
+2. Big DB – what about speed with a lot of records like 100k or more in each table<br>
+3. FileAPI – I mean upload/download</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=132295#respond" onclick='return addComment.moveForm("comment-132295", "132295", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment odd alt thread-odd thread-alt depth-1">
+	    
+	    	<a name="comment-132349"></a>
+	      	
+	      	<div id="li-comment-132349" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/9007ac06ae43b44bb090f1fd77f1e80e.jpeg" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name"><a href="http://act-dakar.net/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://act-dakar.net']);" rel="external nofollow" class="url url">lemeteore</a></span>           
+	                <span class="date">October 4, 2012 at 1:55 am</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-132349" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-132349">
+				
+				<p>Thanks a lot, really nice indeed. But I think we should read this one: <a href="http://www.smartjava.org/content/presentation-rest-hateoas" onclick="javascript:_gaq.push(['_trackEvent','outbound-comment','http://www.smartjava.org']);" rel="nofollow">http://www.smartjava.org/content/presentation-rest-hateoas</a></p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=132349#respond" onclick='return addComment.moveForm("comment-132349", "132349", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment even thread-even depth-1">
+	    
+	    	<a name="comment-132731"></a>
+	      	
+	      	<div id="li-comment-132731" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/361e79e6c2f2ecab21126da0e2e6129a.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name"><a href="http://www.mfkrh-ar.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://www.mfkrh-ar.com']);" rel="external nofollow" class="url url">mfkrh-ar.com</a></span>           
+	                <span class="date">October 4, 2012 at 7:53 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-132731" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-132731">
+				
+				<p>posts is a good</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=132731#respond" onclick='return addComment.moveForm("comment-132731", "132731", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment odd alt thread-odd thread-alt depth-1 parent">
+	    
+	    	<a name="comment-132733"></a>
+	      	
+	      	<div id="li-comment-132733" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/820801eaac02f9eea0dc7f7bbe9d0283.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name">Chun</span>           
+	                <span class="date">October 4, 2012 at 7:58 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-132733" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-132733">
+				
+				<p>Has anyone tested the curl commandes for Add a new wine and Modify wine with _id value ?<br>
+Theu return errors for me.</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=132733#respond" onclick='return addComment.moveForm("comment-132733", "132733", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	<ul class="children">
+	                 
+		<li class="comment even depth-2">
+	    
+	    	<a name="comment-180477"></a>
+	      	
+	      	<div id="li-comment-180477" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/9b967e3eebc6f785a40a6577939c6b1d.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name"><a href="http://www.freewebs.com/dtnguyenresume/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://www.freewebs.com']);" rel="external nofollow" class="url url">duynii</a></span>           
+	                <span class="date">November 17, 2012 at 10:11 am</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-180477" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-180477">
+				
+				<p>I am completely new to this, have to do uni project.</p>
+<p>Problem is req.body is undefined.</p>
+<p>After searching express, I see that you must use parseBody() middleware, I guess the default is it parses the URL.</p>
+<p>// You need this at top of server.js<br>
+app.use(express.bodyParser());</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=180477#respond" onclick='return addComment.moveForm("comment-180477", "180477", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+</ul>
+</li>
+	                 
+		<li class="comment odd alt thread-even depth-1">
+	    
+	    	<a name="comment-134730"></a>
+	      	
+	      	<div id="li-comment-134730" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/6b7a900bc99c10b2d1831db37a9baa7a.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name">Ken McGelt</span>           
+	                <span class="date">October 7, 2012 at 11:42 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-134730" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-134730">
+				
+				<p>Pretty good so far, but where is this defined?<br>
+“http://localhost:3000/wines/search/Chateau”</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=134730#respond" onclick='return addComment.moveForm("comment-134730", "134730", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment even thread-odd thread-alt depth-1">
+	    
+	    	<a name="comment-134871"></a>
+	      	
+	      	<div id="li-comment-134871" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/8f75abb71394d4541d9b7bcadebf1a36.jpeg" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name"><a href="http://deployd.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://deployd.com']);" rel="external nofollow" class="url url">Jeff</a></span>           
+	                <span class="date">October 8, 2012 at 5:26 am</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-134871" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-134871">
+				
+				<p>Deployd is another node framework that uses MongoDB to make JSON 
+APIs, a little more narrowly focused than express: 
+deployd.com/video.html<br>
+npm install deployd</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=134871#respond" onclick='return addComment.moveForm("comment-134871", "134871", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment odd alt thread-even depth-1">
+	    
+	    	<a name="comment-135752"></a>
+	      	
+	      	<div id="li-comment-135752" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/72c880fe252bd568b1e8f016b41bc51d.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name">David Noleto(Brazil)</span>           
+	                <span class="date">October 9, 2012 at 6:55 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-135752" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-135752">
+				
+				<p>when you make an example with Sencha Touch 2 and PhoneGap ?</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=135752#respond" onclick='return addComment.moveForm("comment-135752", "135752", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment even thread-odd thread-alt depth-1">
+	    
+	    	<a name="comment-136372"></a>
+	      	
+	      	<div id="li-comment-136372" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/5c244f77b33fa65a6d735d090078c408.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name">Greeshma</span>           
+	                <span class="date">October 10, 2012 at 11:54 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-136372" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-136372">
+				
+				<p>Hi All,<br>
+         I am an University student and unable to install mongodb 2.2.0,whenever i write the command<br>
+md C:\mongodb\log,it throws out syntax error  -missing ; before 
+statement (shell):1.same error i got while i tried installing 
+2.0.7,Please help me knowing how to correct it.</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=136372#respond" onclick='return addComment.moveForm("comment-136372", "136372", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment odd alt thread-even depth-1">
+	    
+	    	<a name="comment-136918"></a>
+	      	
+	      	<div id="li-comment-136918" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/61a864e8db0d520a127e4893d0b4d70c.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name">Carlos Saraiva</span>           
+	                <span class="date">October 12, 2012 at 1:30 am</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-136918" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-136918">
+				
+				<p>You say: “In my next post, I’ll share a client application that 
+makes use of that API. Update: The “next post” is now available here.” 
+But the link points back to this page. Please help!!!!!</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=136918#respond" onclick='return addComment.moveForm("comment-136918", "136918", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment byuser comment-author-admin bypostauthor even thread-odd thread-alt depth-1">
+	    
+	    	<a name="comment-137255"></a>
+	      	
+	      	<div id="li-comment-137255" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/3f30c25cbbc01a086a653b5d90535f19_002.jpeg" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name">Christophe</span>           
+	                <span class="date">October 12, 2012 at 8:08 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-137255" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-137255">
+				
+				<p>@Carlos: sorry. I just fixed the link.</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=137255#respond" onclick='return addComment.moveForm("comment-137255", "137255", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment odd alt thread-even depth-1">
+	    
+	    	<a name="comment-139585"></a>
+	      	
+	      	<div id="li-comment-139585" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/95b464604fb565a2308e2387b13762bd.jpeg" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name">Ben</span>           
+	                <span class="date">October 16, 2012 at 11:55 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-139585" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-139585">
+				
+				<p>Don;t forget to start Mongo cd /usr/local/mongodb<br>
+./bin/mongod before testing REST services straight from a browser address bar</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=139585#respond" onclick='return addComment.moveForm("comment-139585", "139585", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment even thread-odd thread-alt depth-1">
+	    
+	    	<a name="comment-152420"></a>
+	      	
+	      	<div id="li-comment-152420" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/1abb9bcd0ac70a4535d15655184c91d9.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name">heri</span>           
+	                <span class="date">October 27, 2012 at 6:06 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-152420" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-152420">
+				
+				<p>Thank you, this is  great</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=152420#respond" onclick='return addComment.moveForm("comment-152420", "152420", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment odd alt thread-even depth-1">
+	    
+	    	<a name="comment-153099"></a>
+	      	
+	      	<div id="li-comment-153099" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/aa0c5fa159846fe685cc8896fa12d339.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name">neutron</span>           
+	                <span class="date">October 28, 2012 at 8:33 am</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-153099" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-153099">
+				
+				<p>Thanks this was a great tutorial, very easy to follow along and to the point.</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=153099#respond" onclick='return addComment.moveForm("comment-153099", "153099", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment even thread-odd thread-alt depth-1">
+	    
+	    	<a name="comment-154193"></a>
+	      	
+	      	<div id="li-comment-154193" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/aa0c5fa159846fe685cc8896fa12d339.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name">neutron</span>           
+	                <span class="date">October 29, 2012 at 5:27 am</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-154193" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-154193">
+				
+				<p>When using this if there isn’t a valid _id record it throws an error like so:</p>
+<p>Error: Argument passed in must be a single String of 12 bytes or a string of 24 hex characters</p>
+<p>I want this to return an error code.</p>
+<p>I notice that it does this also in your live version <a href="http://nodecellar.coenraets.org/wines/1" rel="nofollow">http://nodecellar.coenraets.org/wines/1</a></p>
+<p>Is there an easily way to fix this ? I am new to node and mongodb 
+(this tutorial helped me get setup see post above). I read else where 
+that could use async or fnqueue to fix this but I haven’t be able to do 
+so.</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=154193#respond" onclick='return addComment.moveForm("comment-154193", "154193", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment odd alt thread-even depth-1">
+	    
+	    	<a name="comment-174387"></a>
+	      	
+	      	<div id="li-comment-174387" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/eace380e8ff95fdff0f40581795f065f.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name">kobra</span>           
+	                <span class="date">November 12, 2012 at 9:59 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-174387" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-174387">
+				
+				<p>what about securing the api with authentication system?</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=174387#respond" onclick='return addComment.moveForm("comment-174387", "174387", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment even thread-odd thread-alt depth-1">
+	    
+	    	<a name="comment-186541"></a>
+	      	
+	      	<div id="li-comment-186541" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/ef4d381c5831fa6b5ecbafd88710a555.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name"><a href="http://www.robertodormepoco.org/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://www.robertodormepoco.org']);" rel="external nofollow" class="url url">Roberto</a></span>           
+	                <span class="date">November 21, 2012 at 4:17 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-186541" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-186541">
+				
+				<p>that’s sweet!</p>
+<p>but actually with this implementation of db.open(…)</p>
+<p>you’re not going to create any collection (to populate)</p>
+<p>- db.collection(‘wines’, {safe:true}, function(err, collection) {</p>
+<p>…</p>
+<p>});</p>
+<p>+ db.createCollection(‘wines’, {safe:true}, function(err, collection) { </p>
+<p>.. </p>
+<p>});</p>
+<p>though as stated on the node.js driver docs, db.collection(…) doesn’t
+ have “safe” as an option, then no errors can go back to the callback.</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=186541#respond" onclick='return addComment.moveForm("comment-186541", "186541", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment odd alt thread-even depth-1">
+	    
+	    	<a name="comment-186574"></a>
+	      	
+	      	<div id="li-comment-186574" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/ef4d381c5831fa6b5ecbafd88710a555.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name"><a href="http://www.robertodormepoco.org/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://www.robertodormepoco.org']);" rel="external nofollow" class="url url">Roberto</a></span>           
+	                <span class="date">November 21, 2012 at 4:34 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-186574" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-186574">
+				
+				<p>well i was wrong :)</p>
+<p>“If strict mode is off, then a new collection is created if not already present.”</p>
+<p><a href="http://mongodb.github.com/node-mongodb-native/markdown-docs/collections.html#selecting-collections" onclick="javascript:_gaq.push(['_trackEvent','outbound-comment','http://mongodb.github.com']);" rel="nofollow">http://mongodb.github.com/node-mongodb-native/markdown-docs/collections.html#selecting-collections</a></p>
+<p>though it doesn’t work for me… strict mode is off by default, right? :(</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=186574#respond" onclick='return addComment.moveForm("comment-186574", "186574", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment even thread-odd thread-alt depth-1 parent">
+	    
+	    	<a name="comment-187417"></a>
+	      	
+	      	<div id="li-comment-187417" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/97b6e6e18f5679240faa05ca2b595c3a.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name"><a href="http://niltoid.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://niltoid.com']);" rel="external nofollow" class="url url">ahmad</a></span>           
+	                <span class="date">November 22, 2012 at 4:26 am</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-187417" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-187417">
+				
+				<p>Hi Chris,</p>
+<p>Have you ever had an issue with db.collection and db.createCollection?<br>
+I see how you used “safe:true” as a parameter to check if the collection exists.  </p>
+<p>I copied your code exactly and put it on a brand new aws instance.  
+Everything seems to work great except when calling “db.collection”, err 
+is always null so “populateDB()” is never called.  </p>
+<p>Tried switching it to db.createCollection and same problem – err is always null so populateDB is called EVERY time.</p>
+<p>Tried searching around for this problem but couldn’t find much… any ideas?</p>
+<p>Thanks for the great tutorial!</p>
+<p>db.open(function(err, db) {<br>
+    if(!err) {<br>
+        console.log(“Connected to ‘winedb’ database”);<br>
+        db.createCollection(‘wines’, {safe:true}, function(err, collection){<br>
+            console.log(err);<br>
+            if (!err){<br>
+                console.log(“The ‘wines’ collection doesn’t exist. Creating it with sample data…”);<br>
+                populateDB();<br>
+            } else {<br>
+                console.log(‘wines collection exists’);<br>
+            }<br>
+        });<br>
+        /*<br>
+        db.collection(‘wines’, {safe:true}, function(err, collection) {<br>
+            if (err) {<br>
+                console.log(“The ‘wines’ collection doesn’t exist. Creating it with sample data…”);<br>
+                populateDB();<br>
+            } else {<br>
+                console.log(‘wines collection exists’);<br>
+            }<br>
+        });<br>
+        */<br>
+    }<br>
+});</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=187417#respond" onclick='return addComment.moveForm("comment-187417", "187417", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	<ul class="children">
+	                 
+		<li class="comment odd alt depth-2 parent">
+	    
+	    	<a name="comment-192244"></a>
+	      	
+	      	<div id="li-comment-192244" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/97b6e6e18f5679240faa05ca2b595c3a.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name"><a href="http://niltoid.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://niltoid.com']);" rel="external nofollow" class="url url">ahmad</a></span>           
+	                <span class="date">November 25, 2012 at 4:52 am</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-192244" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-192244">
+				
+				<p>Still not sure why the db.collection and db.createCollection 
+features are not working the way they’re supposed to.  Maybe the module 
+needs to be updated for the latest version of node?</p>
+<p>Anyway, I found a workaround…</p>
+<p>db.collection(‘wines’, function(err, collection){<br>
+    collection.findOne(function(err, item) {<br>
+        if (!item){<br>
+            populateDB();<br>
+        }<br>
+    });<br>
+});</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=192244#respond" onclick='return addComment.moveForm("comment-192244", "192244", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	<ul class="children">
+	                 
+		<li class="comment even depth-3">
+	    
+	    	<a name="comment-201312"></a>
+	      	
+	      	<div id="li-comment-201312" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/7c24ffe4feaffd7067a259186f6c5e30.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name">Chun</span>           
+	                <span class="date">November 30, 2012 at 8:46 am</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-201312" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-201312">
+				
+				<p>I confirm that db.collection doesn’t work if you do npm install mongodb these days.</p>
+<p>db.collection worked when I did npm install mongodb on october, 11.</p>
+<p>If I do npm install mongodb right now and compare with windiff on the
+ directories “node_modules\mongodb” of today and “node_modules\mongodb” 
+of  october, 11, there are 7 differences, among these, there are new 
+files : mongo_client.js, base.js and url_parser.js.</p>
+<p>I can’t explain why yet.</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=201312#respond" onclick='return addComment.moveForm("comment-201312", "201312", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+</ul>
+</li>
+</ul>
+</li>
+	                 
+		<li class="comment odd alt thread-even depth-1">
+	    
+	    	<a name="comment-190520"></a>
+	      	
+	      	<div id="li-comment-190520" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/7c280b1ea099c5dcbd672c319168ee55.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name"><a href="http://www.isikkuyumculuk.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://www.isikkuyumculuk.com']);" rel="external nofollow" class="url url">tektaş pırlanta yüzük</a></span>           
+	                <span class="date">November 24, 2012 at 1:29 am</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-190520" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-190520">
+				
+				<p>Thanks this is the best.i hope you will continue this topic.</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=190520#respond" onclick='return addComment.moveForm("comment-190520", "190520", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment even thread-odd thread-alt depth-1">
+	    
+	    	<a name="comment-219871"></a>
+	      	
+	      	<div id="li-comment-219871" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/6d31d63c7484707695058f69e2142084.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name"><a href="http://luigi7up.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://luigi7up.com']);" rel="external nofollow" class="url url">Luka</a></span>           
+	                <span class="date">December 10, 2012 at 10:21 am</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-219871" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-219871">
+				
+				<p>Man, you really know how to blog… I love your patient and 
+detailed way of writing… You would be a great teacher :) well, you are… 
+Thanks…</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=219871#respond" onclick='return addComment.moveForm("comment-219871", "219871", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment odd alt thread-even depth-1">
+	    
+	    	<a name="comment-220225"></a>
+	      	
+	      	<div id="li-comment-220225" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/6c0434b12b987446d91e60e531287a68.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name">Blacar</span>           
+	                <span class="date">December 10, 2012 at 12:50 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-220225" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-220225">
+				
+				<p>Can’t see any code in the post :P</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=220225#respond" onclick='return addComment.moveForm("comment-220225", "220225", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment even thread-odd thread-alt depth-1">
+	    
+	    	<a name="comment-229238"></a>
+	      	
+	      	<div id="li-comment-229238" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/6baa6b24634e8836d88a7b59d6f7888e.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name">BigKev</span>           
+	                <span class="date">December 14, 2012 at 7:33 am</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-229238" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-229238">
+				
+				<p>Hi – I have converted your code for use with MySQL. I have 
+everything working fine but one problem which involves var id = 
+req.params.id. I can display id on the web page but when I try to use as
+ an input to an SQL statement I continually get an undefined issue. Is 
+this a string issue or a MySQL issue?<br>
+Any thoughts would be much appreciated.</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=229238#respond" onclick='return addComment.moveForm("comment-229238", "229238", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment odd alt thread-even depth-1">
+	    
+	    	<a name="comment-233069"></a>
+	      	
+	      	<div id="li-comment-233069" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/6f9589bbb01d26e24a001b6254444b4d.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name">Hamilton Teixeira</span>           
+	                <span class="date">December 16, 2012 at 5:24 am</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-233069" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-233069">
+				
+				<p>Great tuto…but at line 12 on wine.js is missing {safe: true} as param to complete run the app.</p>
+<p>On your git is updated..</p>
+<p>Anyway…thanks…save me a lot of time… i’m implement this on my project.</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=233069#respond" onclick='return addComment.moveForm("comment-233069", "233069", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment even thread-odd thread-alt depth-1 parent">
+	    
+	    	<a name="comment-236000"></a>
+	      	
+	      	<div id="li-comment-236000" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/6469085cb478ab284c10da9f67bdeed1.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name">jorawebdev</span>           
+	                <span class="date">December 17, 2012 at 9:34 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-236000" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-236000">
+				
+				<p>Great resource Chris! An empty array is being returned on one of my set ups instances, however. </p>
+<p>Here’s what I’m getting:</p>
+<p>Listening on port 3000…<br>
+Connected to ‘winedb’ database<br>
+[]<br>
+Retrieving wine: undefined</p>
+<p>Mongo’s running w/o problems. But I see this:<br>
+“recover : no journal files present, no recovery needed”. Can anyone shine some light on the issue?</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=236000#respond" onclick='return addComment.moveForm("comment-236000", "236000", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	<ul class="children">
+	                 
+		<li class="comment odd alt depth-2">
+	    
+	    	<a name="comment-257152"></a>
+	      	
+	      	<div id="li-comment-257152" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/f7150b6eb78190fe8632015ecfd7d539.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name"><a href="http://thefabric.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://thefabric.com']);" rel="external nofollow" class="url url">thfabric</a></span>           
+	                <span class="date">December 31, 2012 at 1:48 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-257152" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-257152">
+				
+				<p>@jorawebdev I guess with latest release of mongodb, it doesn’t 
+produce an error when browsing an non existent collection. In wines.js, 
+change line 14 from “if (err) {” to “if (!err) {” and the db will be 
+populated once you point your browser to <a href="http://localhost:3000/wines" onclick="javascript:_gaq.push(['_trackEvent','outbound-comment','']);" rel="nofollow">http://localhost:3000/wines</a>. Don’t forget to comment this line afterwards.</p>
+<p>Hope it helps,<br>
+Xavier</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=257152#respond" onclick='return addComment.moveForm("comment-257152", "257152", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+</ul>
+</li>
+	                 
+		<li class="comment even thread-even depth-1">
+	    
+	    	<a name="comment-241567"></a>
+	      	
+	      	<div id="li-comment-241567" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/60a76bb8c58a59ff5f2ca60bf71e694c.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name"><a href="http://sohbet-odasi.gen.tr/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://sohbet-odasi.gen.tr']);" rel="external nofollow" class="url url">sohbet odalari</a></span>           
+	                <span class="date">December 20, 2012 at 6:35 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-241567" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-241567">
+				
+				<p>very blog thanks</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=241567#respond" onclick='return addComment.moveForm("comment-241567", "241567", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment odd alt thread-odd thread-alt depth-1">
+	    
+	    	<a name="comment-241569"></a>
+	      	
+	      	<div id="li-comment-241569" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/60a76bb8c58a59ff5f2ca60bf71e694c.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name"><a href="http://sohbetprogrami.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://sohbetprogrami.com']);" rel="external nofollow" class="url url">kelebek indir</a></span>           
+	                <span class="date">December 20, 2012 at 6:36 pm</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-241569" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-241569">
+				
+				<p>very thanks</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=241569#respond" onclick='return addComment.moveForm("comment-241569", "241569", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+	                 
+		<li class="comment even thread-even depth-1">
+	    
+	    	<a name="comment-271222"></a>
+	      	
+	      	<div id="li-comment-271222" class="comment-container">
+	      	
+					                <div class="avatar"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/b2bbd9362faf7a26aa00f71cd69e0b09.png" class="avatar avatar-40 photo" width="40" height="40"></div>
+	                        
+	
+		      	<div class="comment-head">
+		      	            
+	                <span class="name">TdManson</span>           
+	                <span class="date">January 9, 2013 at 3:01 am</span>
+	                <span class="perma"><a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#comment-271222" title="Direct link to this comment">#</a></span>
+	                <span class="edit"></span>
+		        		          	
+				</div><!-- /.comment-head -->
+		      
+		   		<div class="comment-entry" id="comment-271222">
+				
+				<p>Hi,<br>
+when trying this, and executing this curl :<br>
+curl -i -X GET <a href="http://localhost:3000/wines/5069b47aa892630aae000007" onclick="javascript:_gaq.push(['_trackEvent','outbound-comment','']);" rel="nofollow">http://localhost:3000/wines/5069b47aa892630aae000007</a> </p>
+<p>I get this response : </p>
+<p>HTTP/1.1 200 OK<br>
+X-Powered-By: Express<br>
+Content-Length: 0<br>
+Date: Wed, 09 Jan 2013 02:59:59 GMT<br>
+Connection: keep-alive</p>
+<p>server screen show this :<br>
+Listening on port 3000…<br>
+Connected to ‘winedb’ database<br>
+Retrieving wine: 5069b47aa892630aae000007<br>
+GET /wines/5069b47aa892630aae000007 200 3ms – 0</p>
+<p>Now I am a noob, but shouldn’t I be seeing some useable output? not just something that looks like a debug session info !!</p>
+<p>Thanks for the tutorial though, awsome.</p>
+		            
+										
+	                <div class="reply">
+	                    <a class="comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/?replytocom=271222#respond" onclick='return addComment.moveForm("comment-271222", "271222", "respond", "3967")'>Reply</a>	                </div><!-- /.reply -->                       
+			
+				</div><!-- /comment-entry -->
+	
+			</div><!-- /.comment-container -->
+			
+	</li>
+			</ol>
+		 				 	<h3 id="comments-title">Trackbacks/Pingbacks</h3>
+			 	<ol class="commentlist">
+						
+		<li id="comment-132657">
+			<span class="author"><a href="http://coenraets.org/blog/2012/10/nodecellar-sample-application-with-backbone-js-twitter-bootstrap-node-js-express-and-mongodb/" rel="external nofollow" class="url">NodeCellar: Sample Application with Backbone.js, Twitter Bootstrap, Node.js, Express, and MongoDB</a></span> - 
+			<span class="date">October 4, 2012</span>
+			<span class="pingcontent"><p>[...] my previous post, I shared my recent experience building a RESTful API with Node.js, MongoDB, and [...]</p>
+</span>
+</li>
+	
+		<li id="comment-135651">
+			<span class="author"><a href="http://confluence.lbi.co.uk/display/TECH/2012/10/05/A+Beginners+Introduction+to+Node.js" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://confluence.lbi.co.uk']);" rel="external nofollow" class="url">Confluence: Technology Wiki</a></span> - 
+			<span class="date">October 9, 2012</span>
+			<span class="pingcontent"><p><strong>A Beginners Introduction to Node.js…</strong></p>
+<p>I have recently learned how to write mobile apps u…</p>
+</span>
+</li>
+	
+		<li id="comment-160300">
+			<span class="author"><a href="http://ajlopez.wordpress.com/2012/11/02/express-links-news-and-resources-2/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://ajlopez.wordpress.com']);" rel="external nofollow" class="url">Express: Links, News And Resources (2) « Angel ”Java” Lopez on Blog</a></span> - 
+			<span class="date">November 2, 2012</span>
+			<span class="pingcontent"><p>[...] Creating a REST API using Node.js, Express, and MongoDB <a href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/" rel="nofollow">http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/</a> [...]</p>
+</span>
+</li>
+	
+		<li id="comment-198411">
+			<span class="author"><a href="http://www.avivroth.com/2012/11/28/node-js-mongodb-tutorial/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://www.avivroth.com']);" rel="external nofollow" class="url">Node.js / MongoDB tutorial | Aviv Roth</a></span> - 
+			<span class="date">November 28, 2012</span>
+			<span class="pingcontent"><p>[...] would highly recommend the Node.js
+ / MongoDB tutorial for making a RESTful web service here. &nbsp;It 
+nicely combines all of the required technologies, so you get to learn 
+multiple things at [...]</p>
+</span>
+</li>
+				</ol>
+			</div>								<div id="respond">
+				<h3 id="reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/#respond" style="display:none;">Click here to cancel reply.</a></small></h3>
+									<form action="http://coenraets.org/blog/wp-comments-post.php" method="post" id="commentform">
+																										<p class="comment-form-author"><input id="author" name="author" class="txt" tabindex="1" size="30" aria-required="true" type="text"><label for="author">Name <span class="required">(required)</span></label> </p>
+<p class="comment-form-email"><input id="email" name="email" class="txt" tabindex="2" size="30" aria-required="true" type="text"><label for="email">Email (will not be published) <span class="required">(required)</span></label> </p>
+<p class="comment-form-url"><input id="url" name="url" class="txt" tabindex="3" size="30" type="text"><label for="url">Website</label></p>
+												<p class="comment-form-comment"><label class="hide" for="comment">Comment</label><textarea tabindex="4" id="comment" name="comment" cols="50" rows="10" aria-required="true"></textarea></p>												<p class="form-submit">
+							<input name="submit" id="submit" value="Submit Comment" type="submit">
+							<input name="comment_post_ID" value="3967" id="comment_post_ID" type="hidden">
+<input name="comment_parent" id="comment_parent" value="0" type="hidden">
+						</p>
+						<p style="display: none;"><input id="akismet_comment_nonce" name="akismet_comment_nonce" value="b66a82fc4c" type="hidden"></p>					</form>
+							</div><!-- #respond -->
+			<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery('#commentform').submit(function() {
+            _gaq.push(
+                ['_setAccount','UA-721308-1'],
+                ['_trackEvent','comment']
+            );
+        });
+    });    
+</script>
+			     
+            </div><!-- /#main -->
+                
+            <div id="sidebar">
+	<div id="woo_search-2" class="widget widget_woo_search"><div class="search_main">
+    <form method="get" class="searchform" action="http://coenraets.org/blog/">
+        <input class="field s" name="s" value="Search..." onfocus="if (this.value == 'Search...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search...';}" type="text">
+        <input src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/ico-search.png" alt="Search" class="submit" name="submit" type="image">
+        <input name="post_type" value="post" type="hidden">    </form>    
+    <div class="fix"></div>
+</div>
+</div><div id="woo_blogauthorinfo-2" class="widget widget_woo_blogauthorinfo"><h3>About Me</h3><span class="left"><img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/3f30c25cbbc01a086a653b5d90535f19.jpeg" class="avatar avatar-48 photo" width="48" height="48"></span>
+<p>I'm a Technical Evangelist for Adobe where I focus on the Web Platform, Mobile Applications  and Enterprise Integration.</p>
+<p><a href="http://coenraets.org/blog/bio/">Read More</a></p>
+<div class="fix"></div>
+</div><div id="woo_subscribe-2" class="widget widget_woo_subscribe">	 
+	<div id="connect">
+		<h3>Social Networks</h3>
+		
+		<div>
+			<p> </p>
+			
+			
+						
+						<div class="social">
+		   				   		<a href="http://coenraets.org/blog/feed/" class="subscribe" title="RSS"></a>
+
+		   				   		<a href="http://www.twitter.com/ccoenraets" class="twitter" title="Twitter"></a>
+
+		   				   		<a href="http://www.youtube.com/ccoenraets" class="youtube" title="YouTube"></a>
+
+		   				   		<a href="http://www.linkedin.com/in/coenraets" class="linkedin" title="LinkedIn"></a>
+
+		   				   		<a href="https://plus.google.com/113420108342911308974/" class="googleplus" title="Google+"></a>
+
+							</div>
+						
+		</div><!-- col-left -->
+		
+									
+        <div class="fix"></div>
+	</div>
+	</div>
+		<div id="woo_tabs-2" class="widget widget_woo_tabs"> 		<div id="tabs">
+
+            <ul class="wooTabs">
+                                <li class="popular"><a class="selected" href="#tab-pop">Popular</a></li>                <li class="latest"><a href="#tab-latest">Latest</a></li>                <li class="comments"><a href="#tab-comm">Comments</a></li>                <li class="tags"><a href="#tab-tags">Tags</a></li>            </ul>
+
+            <div class="clear"></div>
+
+            <div class="boxes box inside">
+
+	            
+                                <ul style="display: block;" id="tab-pop" class="list">
+                    	<li>
+				<a title="Sample App with Backbone.js and Twitter Bootstrap" href="http://coenraets.org/blog/2012/02/sample-app-with-backbone-js-and-twitter-bootstrap/">Sample App with Backbone.js and Twitter Bootstrap</a>
+		<span class="meta">February 13, 2012</span>
+		<div class="fix"></div>
+	</li>
+		<li>
+				<a title="NodeCellar: Sample Application with Backbone.js, Twitter Bootstrap, Node.js, Express, and MongoDB" href="http://coenraets.org/blog/2012/10/nodecellar-sample-application-with-backbone-js-twitter-bootstrap-node-js-express-and-mongodb/">NodeCellar: Sample Application with Backbone.js, Twitter Bootstrap, Node.js, Express, and MongoDB</a>
+		<span class="meta">October 4, 2012</span>
+		<div class="fix"></div>
+	</li>
+		<li>
+				<a title="Backbone.js Lessons Learned and Improved Sample App" href="http://coenraets.org/blog/2012/01/backbone-js-lessons-learned-and-improved-sample-app/">Backbone.js Lessons Learned and Improved Sample App</a>
+		<span class="meta">January 30, 2012</span>
+		<div class="fix"></div>
+	</li>
+		<li>
+				<a title="Creating a REST API using Node.js, Express, and MongoDB" href="http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/">Creating a REST API using Node.js, Express, and MongoDB</a>
+		<span class="meta">October 2, 2012</span>
+		<div class="fix"></div>
+	</li>
+		<li style="border-bottom: 0px none;">
+				<a title="Using Backbone.js with jQuery Mobile" href="http://coenraets.org/blog/2012/03/using-backbone-js-with-jquery-mobile/">Using Backbone.js with jQuery Mobile</a>
+		<span class="meta">March 5, 2012</span>
+		<div class="fix"></div>
+	</li>
+	                </ul>
+                                                <ul style="display: none;" id="tab-latest" class="list">
+                    	<li>
+				<a title="PhoneGap and PhoneGap Build in 5 Minutes" href="http://coenraets.org/blog/2012/12/phonegap-and-phonegap-build-in-5-minutes/">PhoneGap and PhoneGap Build in 5 Minutes</a>
+		<span class="meta">December 17, 2012</span>
+		<div class="fix"></div>
+	</li>
+		<li>
+				<a title="Synchronized Browsing and Remote Inspection with Adobe Edge Inspect" href="http://coenraets.org/blog/2012/12/synchronized-browsing-and-remote-inspection-with-adobe-edge-inspect/">Synchronized Browsing and Remote Inspection with Adobe Edge Inspect</a>
+		<span class="meta">December 5, 2012</span>
+		<div class="fix"></div>
+	</li>
+		<li>
+				<a title="New Tutorial: Developing and Architecting a PhoneGap Application" href="http://coenraets.org/blog/2012/11/new-tutorial-developing-and-architecting-a-phonegap-application/">New Tutorial: Developing and Architecting a PhoneGap Application</a>
+		<span class="meta">November 26, 2012</span>
+		<div class="fix"></div>
+	</li>
+		<li>
+				<a title="Creating a Dropbox Integration Extension for Brackets" href="http://coenraets.org/blog/2012/10/creating-a-dropbox-integration-extension-for-brackets/">Creating a Dropbox Integration Extension for Brackets</a>
+		<span class="meta">October 19, 2012</span>
+		<div class="fix"></div>
+	</li>
+		<li style="border-bottom: 0px none;">
+				<a title="Exploring and Contributing to Web Platform Docs" href="http://coenraets.org/blog/2012/10/exploring-and-contributing-to-web-platform-docs/">Exploring and Contributing to Web Platform Docs</a>
+		<span class="meta">October 18, 2012</span>
+		<div class="fix"></div>
+	</li>
+	                </ul>
+                                				<ul style="display: none;" id="tab-comm" class="list">
+                    				<li class="recentcomments">
+										<a href="http://coenraets.org/blog/2012/02/sample-app-with-backbone-js-and-twitter-bootstrap/#comment-274471" title="The Best BootStrap Resources - 华子博客 - 前端技术博客，一起研究关于前端的那点事 on Sample App with Backbone.js and Twitter Bootstrap">The Best BootStrap Resources - 华子博客 - 前端技术博客，一起研究关于前端的那点事: [...] 5、Sample App with Backbone.js and Twitter ...</a>
+					<div class="fix"></div>
+				</li>
+							<li class="recentcomments">
+					<img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/71f81a0ecf04b44c3d2b1613e88c53dc.png" class="avatar avatar-45 photo" width="45" height="45">					<a href="http://coenraets.org/blog/2006/06/flex-and-jms-portfolio-viewer-updated-for-flex-2-ga/#comment-274333" title="Rainbow, Slideshow, Sky, Factory, Connection, In, The, Dark, Dash, Six, Patriots, Cake, on Flex and JMS: Portfolio Viewer (Updated for Flex 2 GA)">Rainbow,
+ Slideshow, Sky, Factory, Connection, In, The, Dark, Dash, Six, 
+Patriots, Cake,: Rainbow Slideshow, Rainbow Sky, Rainbow, Factory, ...</a>
+					<div class="fix"></div>
+				</li>
+							<li class="recentcomments">
+					<img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/79a0b744a3cd054ecabe70b2688c7ca3.png" class="avatar avatar-45 photo" width="45" height="45">					<a href="http://coenraets.org/blog/2012/01/backbone-js-lessons-learned-and-improved-sample-app/#comment-273620" title="Hans on Backbone.js Lessons Learned and Improved Sample App">Hans: Oh, the blog isn't escaping HTML characters corre...</a>
+					<div class="fix"></div>
+				</li>
+							<li class="recentcomments">
+					<img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/79a0b744a3cd054ecabe70b2688c7ca3.png" class="avatar avatar-45 photo" width="45" height="45">					<a href="http://coenraets.org/blog/2012/01/backbone-js-lessons-learned-and-improved-sample-app/#comment-273605" title="Hans on Backbone.js Lessons Learned and Improved Sample App">Hans: It is a great tutorial, but please do us security ...</a>
+					<div class="fix"></div>
+				</li>
+							<li style="border-bottom: 0px none;" class="recentcomments">
+					<img alt="" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/d133bab847d9a7523ffc112bc178f8df.jpeg" class="avatar avatar-45 photo" width="45" height="45">					<a href="http://coenraets.org/blog/2011/12/restful-services-with-jquery-and-java-using-jax-rs-and-jersey/#comment-273379" title="Luis on RESTful services with jQuery and Java using JAX-RS and Jersey">Luis: It works! Simple and clear!
+
+Thanks!...</a>
+					<div class="fix"></div>
+				</li>
+			                </ul>
+                                                <div style="display: none;" id="tab-tags" class="list">
+                    <a href="http://coenraets.org/blog/tag/air/" class="tag-link-3" title="4 topics" style="font-size: 17.818181818182pt;">Air</a>
+<a href="http://coenraets.org/blog/tag/ajax/" class="tag-link-46" title="1 topic" style="font-size: 12pt;">ajax</a>
+<a href="http://coenraets.org/blog/tag/blazeds/" class="tag-link-7" title="1 topic" style="font-size: 12pt;">BlazeDS</a>
+<a href="http://coenraets.org/blog/tag/brackets/" class="tag-link-66" title="1 topic" style="font-size: 12pt;">Brackets</a>
+<a href="http://coenraets.org/blog/tag/charts/" class="tag-link-47" title="3 topics" style="font-size: 16.363636363636pt;">charts</a>
+<a href="http://coenraets.org/blog/tag/data-services/" class="tag-link-48" title="1 topic" style="font-size: 12pt;">Data Services</a>
+<a href="http://coenraets.org/blog/tag/dropbox/" class="tag-link-67" title="1 topic" style="font-size: 12pt;">Dropbox</a>
+<a href="http://coenraets.org/blog/tag/flex/" class="tag-link-12" title="6 topics" style="font-size: 20pt;">Flex</a>
+<a href="http://coenraets.org/blog/tag/flexorg/" class="tag-link-49" title="3 topics" style="font-size: 16.363636363636pt;">flexorg</a>
+<a href="http://coenraets.org/blog/tag/frameworks/" class="tag-link-14" title="1 topic" style="font-size: 12pt;">Frameworks</a>
+<a href="http://coenraets.org/blog/tag/html/" class="tag-link-50" title="1 topic" style="font-size: 12pt;">html</a>
+<a href="http://coenraets.org/blog/tag/ilog/" class="tag-link-18" title="1 topic" style="font-size: 12pt;">ilog</a>
+<a href="http://coenraets.org/blog/tag/lcds/" class="tag-link-28" title="1 topic" style="font-size: 12pt;">LCDS</a>
+<a href="http://coenraets.org/blog/tag/messaging/" class="tag-link-51" title="1 topic" style="font-size: 12pt;">Messaging</a>
+<a href="http://coenraets.org/blog/tag/offline/" class="tag-link-52" title="3 topics" style="font-size: 16.363636363636pt;">Offline</a>
+<a href="http://coenraets.org/blog/tag/open-source/" class="tag-link-53" title="1 topic" style="font-size: 12pt;">Open Source</a>
+<a href="http://coenraets.org/blog/tag/phonegap/" class="tag-link-37" title="2 topics" style="font-size: 14.618181818182pt;">PhoneGap</a>
+<a href="http://coenraets.org/blog/tag/remoting/" class="tag-link-54" title="1 topic" style="font-size: 12pt;">Remoting</a>
+<a href="http://coenraets.org/blog/tag/salesbuilder/" class="tag-link-55" title="1 topic" style="font-size: 12pt;">Salesbuilder</a>
+<a href="http://coenraets.org/blog/tag/sqlite/" class="tag-link-44" title="1 topic" style="font-size: 12pt;">SQLite</a>
+<a href="http://coenraets.org/blog/tag/webplatform/" class="tag-link-68" title="1 topic" style="font-size: 12pt;">WebPlatform</a>                </div>
+                
+            </div><!-- /.boxes -->
+
+        </div><!-- /wooTabs -->
+
+        </div>         <div id="woo_twitter-2" class="widget widget_woo_twitter"><h3>Recent Tweets</h3><div class="back">
+<ul id="twitter_update_list_woo_twitter-2"><li><span class="content">Join #AdobeTechLive Thu 1pm ET. Future of CSS + new HTML tools: #EdgeAnimate, #Reflow, #EdgeInspect, and #PhoneGap <a href="http://t.co/sd8h40hD">http://t.co/sd8h40hD</a></span> <a style="font-size:85%" class="time" href="http://twitter.com/ccoenraets/statuses/281123840296382465">23 days ago</a></li><li><span class="content">Blogged screencast: PhoneGap and PhoneGap Build in 5 Minutes <a href="http://t.co/Eo3ketVJ">http://t.co/Eo3ketVJ</a></span> <a style="font-size:85%" class="time" href="http://twitter.com/ccoenraets/statuses/280778692903440384">24 days ago</a></li><li><span class="content">Looking forward to presenting with @<a href="http://twitter.com/agreenblatt">agreenblatt</a> at #createtheweb Montreal tonight <a href="http://t.co/gVwYkoHB">http://t.co/gVwYkoHB</a></span> <a style="font-size:85%" class="time" href="http://twitter.com/ccoenraets/statuses/276788282908635136">35 days ago</a></li><li><span class="content">Blogged Screencast: Synchronized Browsing and Remote Inspection with Adobe Edge Inspect <a href="http://t.co/XWuXY6xV">http://t.co/XWuXY6xV</a></span> <a style="font-size:85%" class="time" href="http://twitter.com/ccoenraets/statuses/276360854843310082">36 days ago</a></li><li><span class="content">Blogged New In-Depth Tutorial: Developing and Architecting a PhoneGap Application <a href="http://t.co/QmORf1N5">http://t.co/QmORf1N5</a></span> <a style="font-size:85%" class="time" href="http://twitter.com/ccoenraets/statuses/273097416717250561">45 days ago</a></li></ul>
+<p>Follow <a href="http://twitter.com/ccoenraets"><strong>@ccoenraets</strong></a> on Twitter</p>
+</div>
+<div class="clear"></div>
+	<script type="text/javascript">
+	<!--//--><![CDATA[//><!--
+
+	    function twitterCallback2(twitters) {
+
+	      var statusHTML = [];
+	      for (var i=0; i<twitters.length; i++){
+	        var username = twitters[i].user.screen_name;
+	        var status = twitters[i].text.replace(/((https?|s?ftp|ssh)\:\/\/[^"\s\<\>]*[^.,;'">\:\s\<\>\)\]\!])/g, function(url) {
+	          return '<a href="'+url+'">'+url+'</a>';
+	        }).replace(/\B@([_a-z0-9]+)/ig, function(reply) {
+	          return  reply.charAt(0)+'<a href="http://twitter.com/'+reply.substring(1)+'">'+reply.substring(1)+'</a>';
+	        });
+	        statusHTML.push( '<li><span class="content">'+status+'</span> <a style="font-size:85%" class="time" href="http://twitter.com/'+username+'/statuses/'+twitters[i].id_str+'">'+relative_time(twitters[i].created_at)+'</a></li>' );
+	      }
+	      document.getElementById( 'twitter_update_list_woo_twitter-2').innerHTML = statusHTML.join( '' );
+	    }
+
+	    function relative_time(time_value) {
+	      var values = time_value.split( " " );
+	      time_value = values[1] + " " + values[2] + ", " + values[5] + " " + values[3];
+	      var parsed_date = Date.parse(time_value);
+	      var relative_to = (arguments.length > 1) ? arguments[1] : new Date();
+	      var delta = parseInt((relative_to.getTime() - parsed_date) / 1000);
+	      delta = delta + (relative_to.getTimezoneOffset() * 60);
+
+	      if (delta < 60) {
+	        return 'less than a minute ago';
+	      } else if(delta < 120) {
+	        return 'about a minute ago';
+	      } else if(delta < (60*60)) {
+	        return (parseInt(delta / 60)).toString() + ' minutes ago';
+	      } else if(delta < (120*60)) {
+	        return 'about an hour ago';
+	      } else if(delta < (24*60*60)) {
+	        return 'about ' + (parseInt(delta / 3600)).toString() + ' hours ago';
+	      } else if(delta < (48*60*60)) {
+	        return '1 day ago';
+	      } else {
+	        return (parseInt(delta / 86400)).toString() + ' days ago';
+	      }
+	    }
+	//-->!]]>
+	</script>
+	<script type="text/javascript" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/ccoenraets.js"></script>
+	</div></div><!-- /#sidebar -->
+
+		</div><!-- /#main-sidebar-container -->         
+
+		
+    </div><!-- /#content -->
+	
+	<div id="footer" class="col-full">
+	
+		    
+	    
+		<div id="copyright" class="col-left">
+			<p>© 2013 Christophe Coenraets. All Rights Reserved. </p>		</div>
+		
+		<div id="credit" class="col-right">
+			<p>Powered by <a href="http://wordpress.org/" title="WordPress">WordPress</a>. Designed by <a href="http://www.woothemes.com/" title="WooThemes"><img src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/woothemes.png" alt="Woo Themes" width="74" height="19"></a></p>		</div>
+		
+	</div><!-- /#footer  -->
+	
+	    
+	
+	</div><!-- /#wrapper -->
+	
+	<div class="fix"></div><!--/.fix-->
+	
+	<!-- Woo Tabs Widget -->
+<script type="text/javascript">
+jQuery(document).ready(function(){
+	// UL = .wooTabs
+	// Tab contents = .inside
+
+	var tag_cloud_class = '#tagcloud';
+
+	//Fix for tag clouds - unexpected height before .hide()
+	var tag_cloud_height = jQuery( '#tagcloud').height();
+
+	jQuery( '.inside ul li:last-child').css( 'border-bottom','0px' ); // remove last border-bottom from list in tab content
+	jQuery( '.wooTabs').each(function(){
+		jQuery(this).children( 'li').children( 'a:first').addClass( 'selected' ); // Add .selected class to first tab on load
+	});
+	jQuery( '.inside > *').hide();
+	jQuery( '.inside > *:first-child').show();
+
+	jQuery( '.wooTabs li a').click(function(evt){ // Init Click funtion on Tabs
+
+		var clicked_tab_ref = jQuery(this).attr( 'href' ); // Strore Href value
+
+		jQuery(this).parent().parent().children( 'li').children( 'a').removeClass( 'selected' ); //Remove selected from all tabs
+		jQuery(this).addClass( 'selected' );
+		jQuery(this).parent().parent().parent().children( '.inside').children( '*').hide();
+
+		jQuery( '.inside ' + clicked_tab_ref).fadeIn(500);
+
+		 evt.preventDefault();
+
+	})
+})
+</script>
+<script src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/in.js" type="text/javascript"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var wooFeedbackL10n = {"nextButton":"Next \u2192","prevButton":"\u2190 Previous"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="Creating%20a%20REST%20API%20using%20Node.js,%20Express,%20and%20MongoDB%20%7C%20Christophe%20Coenraets_files/feedback.js"></script>
+		
+
+
+
+
+</body></html>
+<!-- Dynamic page generated in 1.080 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2013-01-11 09:02:43 -->
+<!-- super cache -->
